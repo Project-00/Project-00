@@ -1,2 +1,2 @@
-GitƒeƒXƒg
+Githenkoukuwaeta
 push test
