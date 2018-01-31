@@ -1,0 +1,7 @@
+1.developにcomit push
+
+2.ローカルのmasterリポジトリに切り替えてブランチがmasterであることを確認
+
+3.BranchメニューのMerge into ～～　を選択
+
+4.masterブランチをpush
