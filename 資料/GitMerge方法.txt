@@ -1,7 +1,7 @@
-1.develop‚Écomit push
+1.developã«comit push
 
-2.ƒ[ƒJƒ‹‚ÌmasterƒŠƒ|ƒWƒgƒŠ‚ÉØ‚è‘Ö‚¦‚Äƒuƒ‰ƒ“ƒ`‚ªmaster‚Å‚ ‚é‚±‚Æ‚ğŠm”F
+2.ãƒ­ãƒ¼ã‚«ãƒ«ã®masterãƒªãƒã‚¸ãƒˆãƒªã«åˆ‡ã‚Šæ›¿ãˆã¦ãƒ–ãƒ©ãƒ³ãƒãŒmasterã§ã‚ã‚‹ã“ã¨ã‚’ç¢ºèª
 
-3.Branchƒƒjƒ…[‚ÌMerge into ``@‚ğ‘I‘ğ
+3.Branchãƒ¡ãƒ‹ãƒ¥ãƒ¼ã®Merge into ï½ï½ã€€ã‚’é¸æŠ
 
-4.masterƒuƒ‰ƒ“ƒ`‚ğpush
+4.masterãƒ–ãƒ©ãƒ³ãƒã‚’push
