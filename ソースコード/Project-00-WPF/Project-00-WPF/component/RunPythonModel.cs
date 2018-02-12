@@ -3,30 +3,60 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using System.Diagnostics;
 
 namespace Project_00_WPF.component
 {
     class RunPythonModel //Python実行クラス
     {
-        public void Run(string path)
+        public void Run(string pythonName)
         {
-            //スクリプトのランタイムオプション
-            Dictionary<string, object> options = new Dictionary<string, object>();
-            //デバッグ実行の場合スクリプトもデバッグモードにする。
-            options["Debug"] = true;
-            //オプションを指定してPythonのランタイムを作成する。
-            ScriptRuntime pyRuntime = Python.CreateRuntime(options);
+            // full path of python interpreter 
+            string python = @"C:\Continuum\Anaconda\python.exe";
 
-            //Pythonのファイルを指定する。
-            //ScriptScopeの型は実行時に解決される。
-            dynamic py = pyRuntime.UseFile(path);
+            // python app to call 
+            string myPythonApp = pythonName;
 
-            //Pythonのコードに書かれているメソッドを呼び出す。
-            //戻り値の型は実行時に解決される。
-            dynamic PyClassObject = py.getObject();
+            // dummy parameters to send Python script 
+            int x = 2;
+            int y = 5;
 
-            //Pythonからの戻り値を使用して何らかの処理。
-            Console.WriteLine("{0},{1}", PyClassObject.placeCode, PyClassObject.year);
+            // Create new process start info 
+            ProcessStartInfo myProcessStartInfo = new ProcessStartInfo(python);
+
+            // make sure we can read the output from stdout 
+            myProcessStartInfo.UseShellExecute = false;
+            myProcessStartInfo.RedirectStandardOutput = true;
+
+            // start python app with 3 arguments  
+            // 1st arguments is pointer to itself,  
+            // 2nd and 3rd are actual arguments we want to send 
+            myProcessStartInfo.Arguments = myPythonApp + " " + x + " " + y;
+
+            Process myProcess = new Process();
+            // assign start information to the process 
+            myProcess.StartInfo = myProcessStartInfo;
+
+            Console.WriteLine("Calling Python script with arguments {0} and {1}", x, y);
+            // start the process 
+            myProcess.Start();
+
+            // Read the standard output of the app we called.  
+            // in order to avoid deadlock we will read output first 
+            // and then wait for process terminate: 
+            StreamReader myStreamReader = myProcess.StandardOutput;
+            string myString = myStreamReader.ReadLine();
+
+            /*if you need to read multiple lines, you might use: 
+                string myString = myStreamReader.ReadToEnd() */
+
+            // wait exit signal from the app we called and then close it. 
+            myProcess.WaitForExit();
+            myProcess.Close();
+
+            // write the output we got from python app 
+            Console.WriteLine("Value received from script: " + myString);
         }
     }
 }
