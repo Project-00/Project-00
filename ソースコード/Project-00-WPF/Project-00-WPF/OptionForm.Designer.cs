@@ -31,6 +31,10 @@
             this.CloseButton = new System.Windows.Forms.Button();
             this.OptionLavel = new System.Windows.Forms.Label();
             this.ApplyButton = new System.Windows.Forms.Button();
+            this.OptionTabControl = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.OptionTabControl.SuspendLayout();
             this.SuspendLayout();
             // 
             // CloseButton
@@ -70,11 +74,43 @@
             this.ApplyButton.Text = "Apply";
             this.ApplyButton.UseVisualStyleBackColor = false;
             // 
+            // OptionTabControl
+            // 
+            this.OptionTabControl.Controls.Add(this.tabPage1);
+            this.OptionTabControl.Controls.Add(this.tabPage2);
+            this.OptionTabControl.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.OptionTabControl.Location = new System.Drawing.Point(16, 37);
+            this.OptionTabControl.Name = "OptionTabControl";
+            this.OptionTabControl.SelectedIndex = 0;
+            this.OptionTabControl.Size = new System.Drawing.Size(583, 296);
+            this.OptionTabControl.TabIndex = 13;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Location = new System.Drawing.Point(4, 27);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(575, 265);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "UserTab";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Location = new System.Drawing.Point(4, 27);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(575, 265);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "ApplicationTab";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
             // OptionForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(611, 381);
+            this.Controls.Add(this.OptionTabControl);
             this.Controls.Add(this.ApplyButton);
             this.Controls.Add(this.OptionLavel);
             this.Controls.Add(this.CloseButton);
@@ -82,6 +118,7 @@
             this.Name = "OptionForm";
             this.Text = "OptionForm";
             this.Load += new System.EventHandler(this.OptionForm_Load);
+            this.OptionTabControl.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -92,5 +129,8 @@
         private System.Windows.Forms.Button CloseButton;
         private System.Windows.Forms.Label OptionLavel;
         private System.Windows.Forms.Button ApplyButton;
+        private System.Windows.Forms.TabControl OptionTabControl;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPage2;
     }
 }
