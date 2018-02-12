@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 //基本情報クラス
 using Project_00_WPF.common;
 
@@ -95,5 +96,14 @@ namespace Project_00_WPF
         }
         #endregion
 
-    }
+        #region チャート初期化処理
+        private void initChart(Chart chart)
+        {
+            // チャート全体の背景色を設定
+            chart.BackColor = Color.Black;
+            chart.ChartAreas[0].BackColor = Color.Transparent;
+        }
+        #endregion
+
+     }
 }

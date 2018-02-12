@@ -47,25 +47,25 @@ namespace Project_00_WPF
             if(LoginIdText.Text == string.Empty)
             {
                 //値が入っていない場合は赤表示
-                LoginIdText.BackColor = Color.PaleVioletRed;
+                LoginIdText.BackColor = Properties.System.Default.TextBoxErrorColor;
                 setFlg = false;
             }
             else{
                 //値が入っている場合は通常表示
-                LoginIdText.BackColor = Color.White;
+                LoginIdText.BackColor = Properties.System.Default.TextBoxStandardColor;
             }
 
             //パスワードをセット
             if (LoginPasswordText.Text == string.Empty)
             {
                 //値が入っていない場合は赤表示
-                LoginPasswordText.BackColor = Color.PaleVioletRed;
+                LoginPasswordText.BackColor = Properties.System.Default.TextBoxErrorColor;
                 setFlg = false;
             }
             else
             {
                 //値が入っている場合は通常表示
-                LoginPasswordText.BackColor = Color.White;
+                LoginPasswordText.BackColor = Properties.System.Default.TextBoxStandardColor;
             }
 
             if (setFlg)
