@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  mongodb:
+     container_name:mongodb
+     image: mongo:3.6.0
+     enviroment:
+      - "MONGODB_USER = user"
+      - "MONGODB_PASS = password"
+     ports:
+       - "27017:27017"
+          
+     volumes:
+       - "mongodb-data:/data/db"
+     
+     command: mongod --smallfiles
+     
+     
+tensorflow:
+  build: ./build/tensorflow
+  container_name:
+  links:
+    - mongodb
+  ports:
+    - ":"
+    - ":"
+    
