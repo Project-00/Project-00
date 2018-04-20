@@ -209,23 +209,28 @@ if __name__ == "__main__":
 
 
 
+    def plotCrossEntropy():
+        # #損失率のプロット
+        plt.figure()
+        plt.plot(loss_vec, "k-")
+        plt.title("Cross Entropy Loss per cov")
+        plt.xlabel("vector")
+        plt.ylabel("Cross Entropy")
+        plt.savefig("損失率.png")
 
-    # #損失率のプロット
-    plt.plot(loss_vec, "k-")
-    plt.title("Cross Entropy Loss per cov")
-    plt.xlabel("vector")
-    plt.ylabel("Cross Entropy")
-    plt.show()
+    def plotTrainresult():
+        #トレーニングセットとテストセットのプロット
+        plt.figure()
+        plt.plot(train_acc, "r-", label="Train Set Accuracy")
+        plt.plot(test_acc, "b-", label="test Set Accuracy")
+        plt.title("Train and Test")
+        plt.xlabel("Mid cov End")
+        plt.ylabel("updown")
+        plt.legend(loc="lower right")
+        plt.savefig("トレーニングとテストの比較")
 
-    #トレーニングセットとテストセットのプロット
-    plt.plot(train_acc, "r-", label="Train Set Accuracy")
-    plt.plot(test_acc, "b-", label="test Set Accuracy")
-    plt.title("Train and Test")
-    plt.xlabel("Mid cov End")
-    plt.ylabel("updown")
-    plt.legend(loc="lower right")
-    plt.show()
-
+    plotCrossEntropy()
+    plotTrainresult()
 
     saver = tf.train.Saver()
     saver.save(sess, './testmodel')
