@@ -171,7 +171,7 @@ if __name__ == "__main__":
     train_acc = []
     test_acc = []
 
-    for i in range(3000):
+    for i in range(30000):
         # バッチを選択するためのインデックスをランダムに選択
         rand_index = np.random.choice(len(x_vals_train), size=batch_size)
 
@@ -204,7 +204,9 @@ if __name__ == "__main__":
         })
         test_acc.append(temp_acc_test)
 
+
         if (i + 1) % 150 == 0:
+            print("正解率 =" + str(temp_acc_test))
             print("Loss = " + str(temp_loss))
 
 
