@@ -10,6 +10,8 @@ using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 //基本情報クラス
 using Project_00_WPF.common;
+//Python呼び出しクラス
+using Project_00_WPF.component;
 
 namespace Project_00_WPF
 {
@@ -23,8 +25,6 @@ namespace Project_00_WPF
         #region 初期処理
         private void Project00_Load(object sender, EventArgs e)
         {
-            //基本情報の取得
-            //CommonContext context = new CommonContext();
 
             //// マウス移動イベントを追加
             this.MouseDown += new MouseEventHandler(Form_MouseDown);
@@ -105,5 +105,15 @@ namespace Project_00_WPF
         }
         #endregion
 
-     }
+        #region スタートボタン押下時処理
+        private void StartButton_Click(object sender, EventArgs e)
+        {
+            //PythonTestを呼び出す
+            string pythonFileName = "PythonTest.py";
+            string result = RunPythonModel.Run(pythonFileName);
+
+            MessageBox.Show(result);
+        }
+        #endregion
+    }
 }

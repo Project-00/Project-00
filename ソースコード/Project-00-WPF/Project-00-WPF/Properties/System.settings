@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Project_00_WPF.Properties" GeneratedClassName="Settings1">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Project_00_WPF.Properties" GeneratedClassName="System">
   <Profiles />
   <Settings>
     <Setting Name="TextBoxStandardColor" Type="System.Drawing.Color" Scope="User">
@@ -7,6 +7,9 @@
     </Setting>
     <Setting Name="TextBoxErrorColor" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">PaleVioletRed</Value>
+    </Setting>
+    <Setting Name="PythonFilePath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\Users\Borshch\github\Project-00\develop\Project-00\ソースコード\Project-00-WPF\PythonTest\</Value>
     </Setting>
   </Settings>
 </SettingsFile>

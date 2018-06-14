@@ -46,8 +46,8 @@
             this.StartButton = new System.Windows.Forms.Button();
             this.EndButton = new System.Windows.Forms.Button();
             this.TradingPanel = new System.Windows.Forms.Panel();
-            this.button2 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.button2 = new System.Windows.Forms.Button();
             this.TabControl.SuspendLayout();
             this.ChartTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ChartGraph)).BeginInit();
@@ -133,7 +133,7 @@
             this.TradeTab.Location = new System.Drawing.Point(4, 27);
             this.TradeTab.Name = "TradeTab";
             this.TradeTab.Padding = new System.Windows.Forms.Padding(3);
-            this.TradeTab.Size = new System.Drawing.Size(1021, 577);
+            this.TradeTab.Size = new System.Drawing.Size(1044, 577);
             this.TradeTab.TabIndex = 1;
             this.TradeTab.Text = "Trade";
             this.TradeTab.UseVisualStyleBackColor = true;
@@ -187,6 +187,7 @@
             this.StartButton.TabIndex = 0;
             this.StartButton.Text = "Start";
             this.StartButton.UseVisualStyleBackColor = false;
+            this.StartButton.Click += new System.EventHandler(this.StartButton_Click);
             // 
             // EndButton
             // 
@@ -213,6 +214,15 @@
             this.TradingPanel.Size = new System.Drawing.Size(1234, 47);
             this.TradingPanel.TabIndex = 4;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(7, -4);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(68, 18);
+            this.label1.TabIndex = 8;
+            this.label1.Text = "Project-00";
+            // 
             // button2
             // 
             this.button2.BackColor = System.Drawing.Color.LightSlateGray;
@@ -226,15 +236,6 @@
             this.button2.TabIndex = 1;
             this.button2.Text = "Option";
             this.button2.UseVisualStyleBackColor = false;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(7, -4);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(68, 18);
-            this.label1.TabIndex = 8;
-            this.label1.Text = "Project-00";
             // 
             // Project00
             // 

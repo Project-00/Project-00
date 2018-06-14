@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project-00-WPF", "Project-00-WPF\Project-00-WPF.csproj", "{56C0F1E3-BD93-4571-A911-78D89A678E32}"
 EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "PythonTest", "PythonTest\PythonTest.pyproj", "{93EFFFD9-DC4A-40EA-8ABA-403999E53059}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,8 @@ Global
 		{56C0F1E3-BD93-4571-A911-78D89A678E32}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56C0F1E3-BD93-4571-A911-78D89A678E32}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{56C0F1E3-BD93-4571-A911-78D89A678E32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93EFFFD9-DC4A-40EA-8ABA-403999E53059}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93EFFFD9-DC4A-40EA-8ABA-403999E53059}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

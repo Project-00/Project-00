@@ -5,58 +5,39 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Diagnostics;
+using IronPython.Hosting;
+using Microsoft.Scripting.Hosting;
 
 namespace Project_00_WPF.component
 {
-    class RunPythonModel //Python実行クラス
+    public static class RunPythonModel //Python実行クラス
     {
-        public void Run(string pythonName)
+        public static string Run(string pythonName)
         {
-            // full path of python interpreter 
-            string python = @"C:\Continuum\Anaconda\python.exe";
+            //Pythonスクリプト実行エンジン
+            ScriptEngine pse = Python.CreateEngine();
 
-            // python app to call 
-            string myPythonApp = pythonName;
+            //実行エンジンに渡す値を設定する
+            ScriptScope scope = pse.CreateScope();
 
-            // dummy parameters to send Python script 
-            int x = 2;
-            int y = 5;
+            //"Csharp_value"という変数名で、"Symfo"という値を渡す
+            scope.SetVariable("Csharp_value", "Symfo");
 
-            // Create new process start info 
-            ProcessStartInfo myProcessStartInfo = new ProcessStartInfo(python);
+            //Pythonのソースを指定(空の場合は実行フォルダ内とする)
+            string pythonPath = Properties.System.Default.PythonFilePath;
+            if (pythonPath == string.Empty)
+            {
+                pythonPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            }
+            ScriptSource source = pse.CreateScriptSourceFromFile(pythonPath + pythonName);
 
-            // make sure we can read the output from stdout 
-            myProcessStartInfo.UseShellExecute = false;
-            myProcessStartInfo.RedirectStandardOutput = true;
+            //C:\sample.pyにおいたソースを実行する
+            source.Execute(scope);
 
-            // start python app with 3 arguments  
-            // 1st arguments is pointer to itself,  
-            // 2nd and 3rd are actual arguments we want to send 
-            myProcessStartInfo.Arguments = myPythonApp + " " + x + " " + y;
+            //実行した結果を取得
+            var python_result1 = scope.GetVariable<string>("python_result");
 
-            Process myProcess = new Process();
-            // assign start information to the process 
-            myProcess.StartInfo = myProcessStartInfo;
-
-            Console.WriteLine("Calling Python script with arguments {0} and {1}", x, y);
-            // start the process 
-            myProcess.Start();
-
-            // Read the standard output of the app we called.  
-            // in order to avoid deadlock we will read output first 
-            // and then wait for process terminate: 
-            StreamReader myStreamReader = myProcess.StandardOutput;
-            string myString = myStreamReader.ReadLine();
-
-            /*if you need to read multiple lines, you might use: 
-                string myString = myStreamReader.ReadToEnd() */
-
-            // wait exit signal from the app we called and then close it. 
-            myProcess.WaitForExit();
-            myProcess.Close();
-
-            // write the output we got from python app 
-            Console.WriteLine("Value received from script: " + myString);
+            return python_result1;
         }
     }
 }

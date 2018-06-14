@@ -46,5 +46,18 @@ namespace Project_00_WPF.Properties {
                 this["TextBoxErrorColor"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\Borshch\\github\\Project-00\\develop\\Project-00\\ソースコード\\Project-00-WPF\\Pytho" +
+            "nTest\\")]
+        public string PythonFilePath {
+            get {
+                return ((string)(this["PythonFilePath"]));
+            }
+            set {
+                this["PythonFilePath"] = value;
+            }
+        }
     }
 }
