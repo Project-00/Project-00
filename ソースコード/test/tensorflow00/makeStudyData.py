@@ -52,6 +52,13 @@ def GetDocSingleData(clmData,docKey,ad):
 
     return result
 
+#曜日データを格納する関数
+def GetDayoftheweek():
+
+    #曜日データ取得
+    getDotw = datetime.now().weekday()
+
+    return getDotw
 
 
 
@@ -60,6 +67,8 @@ def insertStudyData():
 
     #日付
     nowDate = GetDate()
+    #曜日
+    nowWeekday = GetDayoftheweek()
     #始値
     startValue = GetDocSingleData("ask","time",-1)
     # 高値
@@ -72,6 +81,7 @@ def insertStudyData():
     #それぞれの値を格納
     point = {
         "DATE": nowDate,
+        "WEEKDAY":nowWeekday,
         "STARTVALUE": startValue,
         "HIGHVALUE":highValue,
         "LOWVALUE":lowValue,
