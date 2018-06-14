@@ -26,7 +26,7 @@ namespace Project_00_WPF
         private void Project00_Load(object sender, EventArgs e)
         {
 
-            //// マウス移動イベントを追加
+            //マウス移動イベントを追加
             this.MouseDown += new MouseEventHandler(Form_MouseDown);
             this.MouseMove += new MouseEventHandler(Form_MouseMove);
 
@@ -38,6 +38,10 @@ namespace Project_00_WPF
                 loginForm.ShowDialog();
 
             }
+
+            //タイマーイベント実行
+            AppTimer.Start();
+
         }
         #endregion
 
@@ -107,6 +111,17 @@ namespace Project_00_WPF
 
         #region スタートボタン押下時処理
         private void StartButton_Click(object sender, EventArgs e)
+        {
+            //PythonTestを呼び出す
+            string pythonFileName = "PythonTest.py";
+            string result = RunPythonModel.Run(pythonFileName);
+
+            MessageBox.Show(result);
+        }
+        #endregion
+
+        #region タイマー処理
+        private void AppTimer_Tick(object sender, EventArgs e)
         {
             //PythonTestを呼び出す
             string pythonFileName = "PythonTest.py";

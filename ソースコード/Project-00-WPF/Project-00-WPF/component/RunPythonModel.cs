@@ -31,7 +31,7 @@ namespace Project_00_WPF.component
             }
             ScriptSource source = pse.CreateScriptSourceFromFile(pythonPath + pythonName);
 
-            //C:\sample.pyにおいたソースを実行する
+            //ソースを実行する
             source.Execute(scope);
 
             //実行した結果を取得
