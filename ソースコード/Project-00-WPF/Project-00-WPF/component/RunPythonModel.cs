@@ -21,7 +21,7 @@ namespace Project_00_WPF.component
             ScriptScope scope = pse.CreateScope();
 
             //"Csharp_value"という変数名で、"Symfo"という値を渡す
-            scope.SetVariable("Csharp_value", "Symfo");
+            scope.SetVariable("Csharp_value", "True");
 
             //Pythonのソースを指定(空の場合は実行フォルダ内とする)
             string pythonPath = Properties.System.Default.PythonFilePath;
@@ -35,7 +35,7 @@ namespace Project_00_WPF.component
             source.Execute(scope);
 
             //実行した結果を取得
-            var python_result1 = scope.GetVariable<string>("python_result");
+            var python_result1 = scope.GetVariable<string>("result");
 
             return python_result1;
         }

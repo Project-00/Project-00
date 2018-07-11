@@ -171,7 +171,7 @@ if __name__ == "__main__":
     train_acc = []
     test_acc = []
 
-    for i in range(30000):
+    for i in range(3000):
         # バッチを選択するためのインデックスをランダムに選択
         rand_index = np.random.choice(len(x_vals_train), size=batch_size)
 
@@ -218,6 +218,7 @@ if __name__ == "__main__":
         plt.title("Cross Entropy Loss per cov")
         plt.xlabel("vector")
         plt.ylabel("Cross Entropy")
+        plt.ylim([0,1])
         plt.savefig("損失率.png")
 
     def plotTrainresult():
@@ -226,8 +227,9 @@ if __name__ == "__main__":
         plt.plot(train_acc, "r-", label="Train Set Accuracy")
         plt.plot(test_acc, "b-", label="test Set Accuracy")
         plt.title("Train and Test")
-        plt.xlabel("Mid cov End")
-        plt.ylabel("updown")
+        plt.xlabel("traincnt")
+        plt.ylabel("sacsses")
+        plt.ylim([0,1])
         plt.legend(loc="lower right")
         plt.savefig("トレーニングとテストの比較")
 

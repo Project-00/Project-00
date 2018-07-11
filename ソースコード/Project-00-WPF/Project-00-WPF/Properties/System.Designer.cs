@@ -12,7 +12,7 @@ namespace Project_00_WPF.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.5.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.6.0.0")]
     internal sealed partial class System : global::System.Configuration.ApplicationSettingsBase {
         
         private static System defaultInstance = ((System)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new System())));
@@ -49,8 +49,8 @@ namespace Project_00_WPF.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\Borshch\\github\\Project-00\\develop\\Project-00\\ソースコード\\Project-00-WPF\\Pytho" +
-            "nTest\\")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\Akini\\github\\project00\\develop\\Project-00\\ソースコード\\Project-00-WPF\\PythonTe" +
+            "st\\")]
         public string PythonFilePath {
             get {
                 return ((string)(this["PythonFilePath"]));

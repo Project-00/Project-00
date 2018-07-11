@@ -113,8 +113,8 @@ namespace Project_00_WPF
         private void StartButton_Click(object sender, EventArgs e)
         {
             //PythonTestを呼び出す
-            string pythonFileName = "PythonTest.py";
-            string result = RunPythonModel.Run(pythonFileName);
+            //string pythonFileName = "OandaApi_timerate.py";
+            string result = DOScom.Dos();
 
             MessageBox.Show(result);
         }
@@ -124,8 +124,9 @@ namespace Project_00_WPF
         private void AppTimer_Tick(object sender, EventArgs e)
         {
             //PythonTestを呼び出す
-            string pythonFileName = "PythonTest.py";
-            string result = RunPythonModel.Run(pythonFileName);
+            //string pythonFileName = "OandaApi_timerate.py";
+            //string result = RunPythonModel.Run(pythonFileName);
+            string result = DOScom.Dos();
 
             MessageBox.Show(result);
         }

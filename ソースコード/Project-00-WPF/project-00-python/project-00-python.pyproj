@@ -2,16 +2,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>93efffd9-dc4a-40ea-8aba-403999e53059</ProjectGuid>
+    <ProjectGuid>570631cd-8d4d-48d8-9fcb-520e63881ffb</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>PythonTest.py</StartupFile>
+    <StartupFile>OandaApi_timerate.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
-    <Name>PythonTest</Name>
-    <RootNamespace>PythonTest</RootNamespace>
-    <InterpreterId>Global|PythonCore|3.5</InterpreterId>
+    <Name>project-00-python</Name>
+    <RootNamespace>project-00-python</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,23 +21,18 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="imput_oandapy.py">
+    <Compile Include="input_oandapy.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="input_oandapy.py" />
-    <Compile Include="mongodb_write.py" />
+    <Compile Include="mongodb_write.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="OandaApi_timerate.py" />
     <Compile Include="oandapy\exceptions.py" />
     <Compile Include="oandapy\oandapy.py" />
     <Compile Include="oandapy\stream\stream.py" />
     <Compile Include="oandapy\stream\__init__.py" />
     <Compile Include="oandapy\__init__.py" />
-    <Compile Include="PythonTest.py" />
-  </ItemGroup>
-  <ItemGroup>
-    <InterpreterReference Include="Global|ContinuumAnalytics|Anaconda36-64" />
-    <InterpreterReference Include="Global|PythonCore|3.5" />
-    <InterpreterReference Include="Global|PythonCore|3.6" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="oandapy\" />

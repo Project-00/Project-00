@@ -54,11 +54,14 @@ def GetDocSingleData(clmData,docKey,ad):
 
 #曜日データを格納する関数
 def GetDayoftheweek():
-
+    DLT = timezone(timedelta(hours=+0), 'DLT')
     #曜日データ取得
-    getDotw = datetime.now().weekday()
+    Dotw = datetime.now(DLT)
+    getDotw = Dotw.weekday()
 
     return getDotw
+
+
 
 
 
