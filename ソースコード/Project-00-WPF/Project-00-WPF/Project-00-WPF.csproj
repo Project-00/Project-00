@@ -33,7 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="IronPython">
-      <HintPath>D:\インストール\開発\IronPython\IronPython-2.7.7\IronPython.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\Program Files\IronPython 2.7\IronPython.dll</HintPath>
     </Reference>
     <Reference Include="IronPython.SQLite">
       <HintPath>D:\インストール\開発\IronPython\IronPython-2.7.7\DLLs\IronPython.SQLite.dll</HintPath>
@@ -42,7 +42,7 @@
       <HintPath>D:\インストール\開発\IronPython\IronPython-2.7.7\DLLs\IronPython.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Scripting">
-      <HintPath>D:\インストール\開発\IronPython\IronPython-2.7.7\Microsoft.Scripting.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\Program Files\IronPython 2.7\Microsoft.Scripting.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

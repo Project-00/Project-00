@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+
 //基本情報クラス
 using Project_00_WPF.common;
 //Python呼び出しクラス
@@ -113,8 +114,9 @@ namespace Project_00_WPF
         private void StartButton_Click(object sender, EventArgs e)
         {
             //PythonTestを呼び出す
-            //string pythonFileName = "OandaApi_timerate.py";
-            string result = DOScom.Dos();
+            string pythonFileName = "OandaApi_timerate.py";
+            string result = RunPythonModel.Run(pythonFileName);
+            //string result = DOScom.Dos();
 
             MessageBox.Show(result);
         }
@@ -123,10 +125,10 @@ namespace Project_00_WPF
         #region タイマー処理
         private void AppTimer_Tick(object sender, EventArgs e)
         {
-            //PythonTestを呼び出す
-            //string pythonFileName = "OandaApi_timerate.py";
-            //string result = RunPythonModel.Run(pythonFileName);
-            string result = DOScom.Dos();
+            //Python呼び出す
+            string pythonFileName = "OandaApi_timerate.py";
+            string result = RunPythonModel.Run(pythonFileName);
+            //string result = DOScom.Dos();
 
             MessageBox.Show(result);
         }
