@@ -1,6 +1,24 @@
+
+# -*- coding:utf-8 -*-
 import json
+import exceptions
 import requests
-from .exceptions import BadEnvironment, OandaError
+from exceptions import BadEnvironment, OandaError
+
+import os
+
+importf = os.path.abspath("import")
+
+import sys
+sys.path.append(r'C:\Program Files\IronPython 2.7')
+sys.path.append(r'C:\Program Files\IronPython 2.7\DLLs')
+sys.path.append(r'C:\Program Files\IronPython 2.7\Lib')
+sys.path.append(r'C:\Program Files\IronPython 2.7\Lib\site-packages')
+sys.path.append(r'importf' + '\oandapy\stream')
+sys.path.append(r'importf'+'\json')
+
+import clr
+clr.AddReference('mtrand.dll')
 
 """ OANDA API wrapper for OANDA's REST API """
 

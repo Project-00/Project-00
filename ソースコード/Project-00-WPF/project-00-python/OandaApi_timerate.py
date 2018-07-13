@@ -5,7 +5,8 @@ sys.path.append(r'C:\Program Files\IronPython 2.7')
 sys.path.append(r'C:\Program Files\IronPython 2.7\DLLs')
 sys.path.append(r'C:\Program Files\IronPython 2.7\Lib')
 sys.path.append(r'C:\Program Files\IronPython 2.7\Lib\site-packages')
-sys.path.append(r'C:\GitHub\Project-00\develop\Project-00\ソースコード\Project-00-WPF\Project-00-Python\oandapy')
+sys.path.append(r'C:\Users\Akini\github\project00\develop\Project-00\ソースコード\Project-00-WPF\project-00-python\import\oandapy')
+sys.path.append(r'C:\Users\Akini\github\project00\develop\Project-00\ソースコード\Project-00-WPF\project-00-python\import\json')
 
 import oandapy
 import mongodb_write
