@@ -7,13 +7,13 @@ def getDBCollection(collectionName):
     # LocalhostのMongoDBに書き込みます
 
 
-    client = MongoClient("localhost",27017)
+    client = MongoClient("54.69.191.130",27017)
 
     # test_databaseというDBを使います
     db = client.test_database
 
     #コレクションの作成
-    # db.createCollection(collectionName)
+    #db.createCollection(collectionName)
 
     # collectionというコレクションを使います
     collection = db[collectionName]
