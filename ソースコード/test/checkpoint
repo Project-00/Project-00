@@ -1,0 +1,2 @@
+model_checkpoint_path: "tensorflow00"
+all_model_checkpoint_paths: "tensorflow00"

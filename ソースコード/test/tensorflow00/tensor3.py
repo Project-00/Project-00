@@ -236,5 +236,10 @@ if __name__ == "__main__":
     plotCrossEntropy()
     plotTrainresult()
 
+
+    cwd = os.getcwd()
     saver = tf.train.Saver()
-    saver.save(sess, './testmodel')
+    saver.save(sess, cwd + "\\testmodel")
+    print('Saved a model.')
+
+    sess.close()
