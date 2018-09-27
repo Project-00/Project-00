@@ -74,8 +74,8 @@ n_neurons_2 = 128
 net = tf.InteractiveSession()
 
 # プレースホルダーの作成
-X = tf.placeholder(dtype=tf.float32, shape=[None, n_stocks])
-Y = tf.placeholder(dtype=tf.float32, shape=[None])
+X = tf.placeholder(dtype=tf.float32, shape=[None, n_stocks], name="X")
+Y = tf.placeholder(dtype=tf.float32, shape=[None], name="Y")
 
 # 初期化
 sigma = 1
@@ -84,14 +84,14 @@ bias_initializer = tf.zeros_initializer()
 
 
 # バイアスと隠れ層の重み
-W_hidden_1 = tf.Variable(weight_initializer([n_stocks, n_neurons_1]))
-bias_hidden_1 = tf.Variable(bias_initializer([n_neurons_1]))
-W_hidden_2 = tf.Variable(weight_initializer([n_neurons_1, n_neurons_2]))
-bias_hidden_2 = tf.Variable(bias_initializer([n_neurons_2]))
+W_hidden_1 = tf.Variable(weight_initializer([n_stocks, n_neurons_1]), name="h1weight")
+bias_hidden_1 = tf.Variable(bias_initializer([n_neurons_1]), name="h1bias")
+W_hidden_2 = tf.Variable(weight_initializer([n_neurons_1, n_neurons_2]), name="h2weight")
+bias_hidden_2 = tf.Variable(bias_initializer([n_neurons_2]), name="h2bias")
 
 # 出力の重み
-W_out = tf.Variable(weight_initializer([n_neurons_2, 1]),name="weight")
-bias_out = tf.Variable(bias_initializer([1]),name="bias")
+W_out = tf.Variable(weight_initializer([n_neurons_2, 1]), name="weight")
+bias_out = tf.Variable(bias_initializer([1]), name="bias")
 
 # 隠れ層の設定（ReLU＝活性化関数）
 hidden_1 = tf.nn.leaky_relu(tf.add(tf.matmul(X, W_hidden_1),bias_hidden_1))
@@ -99,13 +99,13 @@ hidden_1 = tf.nn.leaky_relu(tf.add(tf.matmul(X, W_hidden_1),bias_hidden_1))
 hidden_2 = tf.nn.leaky_relu(tf.add(tf.matmul(hidden_1, W_hidden_2), bias_hidden_2))
 
 # 出力層の設定
-out = tf.transpose(tf.add(tf.matmul(hidden_2, W_out), bias_out))
+out = tf.transpose(tf.add(tf.matmul(hidden_2, W_out), bias_out, name="out"))
 
 # 損失関数(誤差の計算)交差エントロピー
 mse = tf.reduce_mean(tf.squared_difference(out,Y))
 
 # 最適化関数
-opt = tf.train.AdamOptimizer().minimize(mse)
+opt = tf.train.AdamOptimizer(name="opt").minimize(mse)
 
 # 初期化
 net.run(tf.global_variables_initializer())
