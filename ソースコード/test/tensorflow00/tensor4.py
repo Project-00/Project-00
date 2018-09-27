@@ -47,9 +47,11 @@ test_end = n
 data_train = df_2[train_start:train_end]     # トレーニングの幅の設定
 data_test = df_2[test_start:test_end]        # テストの幅の設定
 
+
 # データの正規化
 scaler = MinMaxScaler(feature_range=(-1,1))     # -1から1の範囲に正規化する設定
 scaler.fit(data_train)                          # 教師データを元に正規化設定（テストデータは必要ない）
+
 # norm→ノーマライゼーション（正規化の略称）
 data_train_norm = scaler.transform(data_train)  # 教師データの正規化
 data_test_norm = scaler.transform(data_test)    # テストデータの正規化
@@ -99,7 +101,7 @@ hidden_1 = tf.nn.leaky_relu(tf.add(tf.matmul(X, W_hidden_1),bias_hidden_1))
 hidden_2 = tf.nn.leaky_relu(tf.add(tf.matmul(hidden_1, W_hidden_2), bias_hidden_2))
 
 # 出力層の設定
-out = tf.transpose(tf.add(tf.matmul(hidden_2, W_out), bias_out, name="out"))
+out = tf.transpose(tf.add(tf.matmul(hidden_2, W_out), bias_out))
 
 # 損失関数(誤差の計算)交差エントロピー
 mse = tf.reduce_mean(tf.squared_difference(out,Y))
