@@ -1,4 +1,4 @@
-import oandapy
+from . import oandapy
 import time
 import pymongo
 from pymongo import MongoClient
@@ -20,9 +20,9 @@ while(True):
     result = insertCollection("TIMERATE",prices[0])
 
     # コレクションにレコードを書き込みます
-    collection.insert(formatToInsert("instrument",prices[0].get("instrument")))
-    collection.insert(formatToInsert("time",prices[0].get("time")))
-    collection.insert(formatToInsert("bid",prices[0].get("bid")))
-    collection.insert(formatToInsert("ask",prices[0].get("ask")))
+    # collection.insert(formatToInsert("instrument",prices[0].get("instrument")))
+    # collection.insert(formatToInsert("time",prices[0].get("time")))
+    # collection.insert(formatToInsert("bid",prices[0].get("bid")))
+    # collection.insert(formatToInsert("ask",prices[0].get("ask")))
 
     print(result)
