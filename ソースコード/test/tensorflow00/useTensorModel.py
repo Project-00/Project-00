@@ -12,7 +12,9 @@ from testDataMaker import testDataMaker
 cwd = os.getcwd()
 
 # tdm = trainDataMaker("usd_jpy_api.csv")
-tdm = testDataMaker("usd_jpy_api_test.csv")
+# tdm = testDataMaker("usd_jpy_api_test.csv")
+tdm = trainDataMaker()
+
 
 scaler = tdm[4]
 
@@ -74,11 +76,11 @@ saver.restore(net, "tensor4.ckpt")
 
 # -- 予測 --
 
-pred_test = net.run(out, feed_dict={X: X_input})
+pred_Prediction = net.run(out, feed_dict={X: X_input})
 
 # 予測値をテストデータに戻す（値も正規化から戻す）
-pred_test = np.concatenate((pred_test.T, X_input), axis=1)
-pred_inv = scaler.inverse_transform(pred_test)
+pred_Prediction = np.concatenate((pred_Prediction.T, X_input), axis=1)
+pred_inv = scaler.inverse_transform(pred_Prediction)
 
 # 予想結果の値はpred_inv
 print(pred_inv)
