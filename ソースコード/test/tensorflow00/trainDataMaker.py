@@ -17,8 +17,7 @@ def trainDataMaker():
 
     df = mongodb_read()
 
-    lastnum = df.shape[0] - 1
-    df_test = df[lastnum]
+    df_test = df.tail(1)
 
     # 終値を１日分移動(closeの位置はデータによるので要注意)
     df_shift = df.copy()
@@ -28,26 +27,29 @@ def trainDataMaker():
     # 加工元のデータを変えないようにするための措置
     df_2 = df_shift.copy()
     # 最後尾はいらないので除去
+    lastnum = df_2.shape[0] - 1
     df_2 = df_2.drop(lastnum)
 
     # time(時間)を消去
     del df_2["time"]
     del df_2["weekday"]
     del df_2["volume"]
-
+    del df_test["time"]
+    del df_test["weekday"]
+    del df_test["volume"]
 
     # データセットの行数と列を格納
     n = df_2.shape[0]  # 行
     p = df_2.shape[1]  # 列
 
     # 訓練データとテストデータへ切り分け
-    # train_start = 0
-    # train_end = int(np.floor(n))  # 前から数えて行全体の８割を教師データとして扱う
+    train_start = 0
+    train_end = int(np.floor(n))  # 前から数えて行全体の８割を教師データとして扱う
     # test_start = train_end   # 教師データ以降のデータをテストデータとして扱う
     # test_end = n
-    # data_train = df_2[train_start:train_end]  # トレーニングの幅の設定
+    data_train = df_2[train_start:train_end]  # トレーニングの幅の設定
     # data_test = df_2[test_start:test_end]  # テストの幅の設定
-    data_train = df_2
+    # data_train = df_2
     data_test = df_test  # テストの幅の設定
 
 
