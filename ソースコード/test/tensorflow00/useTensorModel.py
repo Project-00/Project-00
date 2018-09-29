@@ -19,10 +19,6 @@ n_stocks = tdm[5]
 
 X_input = tdm[1]
 
-# X_input = np.ndarray([None,112.504,112.631,111.401,33445],shape= [None,n_stocks],dtype="float64")
-# X_input = scaler.transform(X_input)
-
-
 # tensor4から使用する要素の復元
 
 # ニューロンの数
