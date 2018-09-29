@@ -10,7 +10,7 @@ import os.path
 from trainDataMaker import trainDataMaker
 
 
-tdm = trainDataMaker("usd_jpy_api.csv")
+tdm = trainDataMaker()
 
 X_train = tdm[0]
 X_test = tdm[1]

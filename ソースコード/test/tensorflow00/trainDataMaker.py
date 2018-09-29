@@ -4,16 +4,18 @@ import pandas as pd
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_absolute_error
-
+from mongodb_read import mongodb_read
 
 # -- 学習データ加工部分 --
 
-def trainDataMaker(csvfile):
+def trainDataMaker():
     # OANDAAPI のドル円１日足を取得して扱いやすくしたデータを用いているため注意。（要工夫）
     # CSVファイルの読み込み（）内で指定
     # 内容の順は time（時間） close（終） open（始） high（高） low（低） volume（取引数）　の順
     # 要素を増やすことでより精度が上がる模様
-    df = pd.read_csv("./__csv__/" + csvfile)
+    # df = pd.read_csv("./__csv__/" + csvfile)
+
+    df = mongodb_read()
 
     # 終値を１日分移動(closeの位置はデータによるので要注意)
     df_shift = df.copy()
@@ -28,6 +30,8 @@ def trainDataMaker(csvfile):
     df_2 = df_2.drop(lastnum)
     # time(時間)を消去
     del df_2["time"]
+    del df_2["weekday"]
+
 
     # データセットの行数と列を格納
     n = df_2.shape[0]  # 行
