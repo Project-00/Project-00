@@ -54,7 +54,10 @@ def trainDataMaker(csvfile):
     Y_train = data_train_norm[:, 0]  # 目的関数（出力を予想する）
     Y_test = data_test_norm[:, 0]  # closeだけを選択している
 
-    return X_train, X_test, Y_train, Y_test, scaler
+    # 訓練データの説明関数を取得
+    n_stocks = X_train.shape[1]  # 説明関数の列数（close 等の要素の種類の数）
+
+    return X_train, X_test, Y_train, Y_test, scaler, n_stocks
 
 # 値の呼び出し方のメモ
 # if __name__ == "__main__":
@@ -65,9 +68,11 @@ def trainDataMaker(csvfile):
 #     Y_train = tdm[2]
 #     Y_test = tdm[3]
 #     scaler = tdm[4]
+#     n_stocks = tdm[5]
 #
 #     print(X_train)
 #     print(X_test)
 #     print(Y_train)
 #     print(Y_test)
 #     print(scaler)
+#     print(n_stocks)

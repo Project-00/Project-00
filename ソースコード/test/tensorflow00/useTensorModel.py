@@ -10,10 +10,20 @@ from trainDataMaker import trainDataMaker
 
 cwd = os.getcwd()
 
-# tensor4から使用する要素の復元
+tdm = trainDataMaker("usd_jpy_api.csv")
+
+scaler = tdm[4]
+
+# X_input = np.ndarray([None,112.504,112.631,111.401,33445],shape= [None,5],dtype="float64")
+# X_input = scaler.transform(X_input)
+
+X_input = tdm[1]
 
 # 説明関数の要素数（列数）
-n_stocks = 4
+n_stocks = tdm[5]
+
+# tensor4から使用する要素の復元
+
 # ニューロンの数
 n_neurons_1 = 256
 n_neurons_2 = 128
@@ -58,17 +68,10 @@ ckpt = tf.train.get_checkpoint_state('./')
 # print(ckpt)
 
 # with tf.Session() as sess:
-#   # 変数の読み込み
-saver.restore(net, "tensor4.ckpt")
 
-tdm = trainDataMaker("usd_jpy_api.csv")
+# #  変数の読み込み
+# saver.restore(net, "tensor4.ckpt")
 
-scaler = tdm[4]
-
-# X_input = np.ndarray([None,112.504,112.631,111.401,33445],shape= [None,5],dtype="float64")
-# X_input = scaler.transform(X_input)
-
-X_input = tdm[1]
 
 # -- 予測 --
 # with tf.Session() as sess:
