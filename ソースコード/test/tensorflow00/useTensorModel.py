@@ -9,19 +9,11 @@ from trainDataMaker import trainDataMaker
 
 
 cwd = os.getcwd()
-# TensorFlowのセッション
-sess = tf.Session()
-
-# 訓練済みモデルのmetaファイル読み込み
-saver = tf.train.import_meta_graph("tensor4.ckpt.meta")
-
-ckpt = tf.train.get_checkpoint_state('./')
-# print(ckpt)
 
 # tensor4から使用する要素の復元
 
 # 説明関数の要素数（列数）
-n_stocks = 5
+n_stocks = 4
 # ニューロンの数
 n_neurons_1 = 256
 n_neurons_2 = 128
@@ -55,19 +47,32 @@ hidden_2 = tf.nn.leaky_relu(tf.add(tf.matmul(hidden_1, W_hidden_2), bias_hidden_
 # 出力層の設定
 out = tf.transpose(tf.add(tf.matmul(hidden_2, W_out), bias_out))
 
-with tf.Session() as sess:
-  # 変数の読み込み
-  saver.restore(sess, "tensor4.ckpt")
+
+# TensorFlowのセッション
+net = tf.InteractiveSession()
+
+# 訓練済みモデルのmetaファイル読み込み
+saver = tf.train.import_meta_graph("tensor4.ckpt.meta")
+
+ckpt = tf.train.get_checkpoint_state('./')
+# print(ckpt)
+
+# with tf.Session() as sess:
+#   # 変数の読み込み
+saver.restore(net, "tensor4.ckpt")
 
 tdm = trainDataMaker("usd_jpy_api.csv")
 
 scaler = tdm[4]
 
-X_input = np.ndarray([])
-X_input = scaler.transform(X_input)
+# X_input = np.ndarray([None,112.504,112.631,111.401,33445],shape= [None,5],dtype="float64")
+# X_input = scaler.transform(X_input)
+
+X_input = tdm[1]
 
 # -- 予測 --
-pred_test = sess.run(out, feed_dict={X: X_input})
+# with tf.Session() as sess:
+pred_test = net.run(out, feed_dict={X: X_input})
 
 # 予測値をテストデータに戻す（値も正規化から戻す）
 pred_test = np.concatenate((pred_test.T, X_input), axis=1)
