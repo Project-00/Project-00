@@ -5,6 +5,7 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_absolute_error
 import tensorflow as tf
 import os.path
+from trainDataMaker import trainDataMaker
 
 
 cwd = os.getcwd()
@@ -58,19 +59,22 @@ with tf.Session() as sess:
   # 変数の読み込み
   saver.restore(sess, "tensor4.ckpt")
 
+tdm = trainDataMaker("usd_jpy_api.csv")
 
+scaler = tdm[4]
 
-Xinput = np.ndarray([99.919,100.471,99.887,30965],dtype="float32")
+X_input = np.ndarray([])
+X_input = scaler.transform(X_input)
 
 # -- 予測 --
-pred_test = sess.run(out, feed_dict={X: Xinput})
+pred_test = sess.run(out, feed_dict={X: X_input})
 
 # 予測値をテストデータに戻す（値も正規化から戻す）
-pred_test = np.concatenate((pred_test.T, Xinput), axis=1)
-# pred_inv = scaler.inverse_transform(pred_test)
+pred_test = np.concatenate((pred_test.T, X_input), axis=1)
+pred_inv = scaler.inverse_transform(pred_test)
 
 # 予想結果の値はpred_inv
-print(pred_test)
+print(pred_inv)
 # 読み方は左から close open high low vol
 
 
