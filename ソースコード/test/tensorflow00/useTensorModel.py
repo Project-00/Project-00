@@ -14,13 +14,14 @@ tdm = trainDataMaker("usd_jpy_api.csv")
 
 scaler = tdm[4]
 
-# X_input = np.ndarray([None,112.504,112.631,111.401,33445],shape= [None,5],dtype="float64")
-# X_input = scaler.transform(X_input)
+# 説明関数の要素数（列数）
+n_stocks = tdm[5]
 
 X_input = tdm[1]
 
-# 説明関数の要素数（列数）
-n_stocks = tdm[5]
+# X_input = np.ndarray([None,112.504,112.631,111.401,33445],shape= [None,n_stocks],dtype="float64")
+# X_input = scaler.transform(X_input)
+
 
 # tensor4から使用する要素の復元
 
@@ -58,23 +59,22 @@ hidden_2 = tf.nn.leaky_relu(tf.add(tf.matmul(hidden_1, W_hidden_2), bias_hidden_
 out = tf.transpose(tf.add(tf.matmul(hidden_2, W_out), bias_out))
 
 
+# -- setting --
+
 # TensorFlowのセッション
 net = tf.InteractiveSession()
 
 # 訓練済みモデルのmetaファイル読み込み
-saver = tf.train.import_meta_graph("tensor4.ckpt.meta")
+# saver = tf.train.import_meta_graph("tensor4.ckpt.meta")
 
-ckpt = tf.train.get_checkpoint_state('./')
-# print(ckpt)
+saver = tf.train.Saver()
+#  変数の読み込み
+saver.restore(net, "tensor4.ckpt")
 
-# with tf.Session() as sess:
-
-# #  変数の読み込み
-# saver.restore(net, "tensor4.ckpt")
 
 
 # -- 予測 --
-# with tf.Session() as sess:
+
 pred_test = net.run(out, feed_dict={X: X_input})
 
 # 予測値をテストデータに戻す（値も正規化から戻す）
@@ -84,5 +84,7 @@ pred_inv = scaler.inverse_transform(pred_test)
 # 予想結果の値はpred_inv
 print(pred_inv)
 # 読み方は左から close open high low vol
+
+
 
 
