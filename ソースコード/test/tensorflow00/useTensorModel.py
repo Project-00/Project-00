@@ -17,7 +17,9 @@ scaler = tdm[4]
 # 説明関数の要素数（列数）
 n_stocks = tdm[5]
 
+# 予測材料
 X_input = tdm[1]
+
 
 # tensor4から使用する要素の復元
 
@@ -54,7 +56,6 @@ hidden_2 = tf.nn.leaky_relu(tf.add(tf.matmul(hidden_1, W_hidden_2), bias_hidden_
 # 出力層の設定
 out = tf.transpose(tf.add(tf.matmul(hidden_2, W_out), bias_out))
 
-
 # -- setting --
 
 # TensorFlowのセッション
@@ -80,6 +81,7 @@ pred_inv = scaler.inverse_transform(pred_test)
 # 予想結果の値はpred_inv
 print(pred_inv)
 # 読み方は左から close open high low vol
+
 
 
 

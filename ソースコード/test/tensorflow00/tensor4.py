@@ -74,7 +74,7 @@ mse_train = []          # 空箱にしておく(随時addしていくため）
 mse_test = []           # 上に同じ
 
 # 反復処理数
-epochs = 500
+epochs = 5000
 for e in range(epochs):
     net.run(opt, feed_dict={X: X_train, Y: Y_train})
 
@@ -89,7 +89,6 @@ pred_inv = scaler.inverse_transform(pred_test)
 # 予想結果の値はpred_inv
 print(pred_inv)
 # 読み方は左から close open high low vol
-
 
 
 #訓練済みモデルの保存
