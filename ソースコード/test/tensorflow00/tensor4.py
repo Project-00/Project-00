@@ -14,7 +14,7 @@ import os.path
 # CSVファイルの読み込み（）内で指定
 # 内容の順は time（時間） close（終） open（始） high（高） low（低） volume（取引数）　の順
 # 要素を増やすことでより精度が上がる模様
-df = pd.read_csv("usd_jpy_api.csv")
+df = pd.read_csv("./__csv__/usd_jpy_api.csv")
 
 # 終値を１日分移動
 df_shift = df.copy()

@@ -16,7 +16,4 @@ def csv_loader(filename):
 
 if __name__ =="__main__":
 
-    csv_loader("USDJPY.csv")
-
-    print(db)
-    print(lb)
+    csv_loader("usd_jpy_api.csv")

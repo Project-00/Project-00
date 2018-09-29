@@ -10,7 +10,7 @@ def getDBCollection(collectionName):
     client = MongoClient("54.69.191.130",27017)
 
     # test_databaseというDBを使います
-    db = client.test_database
+    db = client.AUTO_TRADE_DB
 
     #コレクションの作成
     #db.createCollection(collectionName)

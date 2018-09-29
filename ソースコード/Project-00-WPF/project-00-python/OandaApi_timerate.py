@@ -1,13 +1,5 @@
 
 # coding:utf-8
-import sys
-sys.path.append(r'C:\Program Files\IronPython 2.7')
-sys.path.append(r'C:\Program Files\IronPython 2.7\DLLs')
-sys.path.append(r'C:\Program Files\IronPython 2.7\Lib')
-sys.path.append(r'C:\Program Files\IronPython 2.7\Lib\site-packages')
-sys.path.append(r'C:\Users\Akini\github\project00\develop\Project-00\ソースコード\Project-00-WPF\project-00-python\import\oandapy')
-sys.path.append(r'C:\Users\Akini\github\project00\develop\Project-00\ソースコード\Project-00-WPF\project-00-python\import\json')
-
 import oandapy
 import mongodb_write
 import time
@@ -32,15 +24,15 @@ while(True):
     asking_price = prices[0].get("ask")
 
     # DBの書き込み先を取得する
-    # collection = getDBCollection()
+    collection = getDBCollection()
 
     result = insertCollection("TIMERATE",prices[0])
 
     # コレクションにレコードを書き込みます
-    #collection.insert(formatToInsert("instrument",prices[0].get("instrument")))
-    #collection.insert(formatToInsert("time",prices[0].get("time")))
-    #collection.insert(formatToInsert("bid",prices[0].get("bid")))
-    #collection.insert(formatToInsert("ask",prices[0].get("ask")))
+    collection.insert(formatToInsert("instrument",prices[0].get("instrument")))
+    collection.insert(formatToInsert("time",prices[0].get("time")))
+    collection.insert(formatToInsert("bid",prices[0].get("bid")))
+    collection.insert(formatToInsert("ask",prices[0].get("ask")))
 
     print(prices)
 
