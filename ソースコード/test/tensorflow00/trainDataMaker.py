@@ -17,6 +17,9 @@ def trainDataMaker():
 
     df = mongodb_read()
 
+    lastnum = df.shape[0] - 1
+    df_test = df[lastnum]
+
     # 終値を１日分移動(closeの位置はデータによるので要注意)
     df_shift = df.copy()
     df_shift.close = df_shift.close.shift(-1)
@@ -24,13 +27,13 @@ def trainDataMaker():
     # 念のためデータをdf_2として新しいデータフレームへコピー
     # 加工元のデータを変えないようにするための措置
     df_2 = df_shift.copy()
-
     # 最後尾はいらないので除去
-    lastnum = len(df_2) - 1  # データ行数を求める（個数　-　1）で最後行を見つける
     df_2 = df_2.drop(lastnum)
+
     # time(時間)を消去
     del df_2["time"]
     del df_2["weekday"]
+    del df_2["volume"]
 
 
     # データセットの行数と列を格納
@@ -38,16 +41,19 @@ def trainDataMaker():
     p = df_2.shape[1]  # 列
 
     # 訓練データとテストデータへ切り分け
-    train_start = 0
-    train_end = int(np.floor(n * 0.8))  # 前から数えて行全体の８割を教師データとして扱う
-    test_start = train_end + 1  # 教師データ以降のデータをテストデータとして扱う
-    test_end = n
-    data_train = df_2[train_start:train_end]  # トレーニングの幅の設定
-    data_test = df_2[test_start:test_end]  # テストの幅の設定
+    # train_start = 0
+    # train_end = int(np.floor(n))  # 前から数えて行全体の８割を教師データとして扱う
+    # test_start = train_end   # 教師データ以降のデータをテストデータとして扱う
+    # test_end = n
+    # data_train = df_2[train_start:train_end]  # トレーニングの幅の設定
+    # data_test = df_2[test_start:test_end]  # テストの幅の設定
+    data_train = df_2
+    data_test = df_test  # テストの幅の設定
+
 
     # データの正規化
-    scaler = MinMaxScaler(feature_range=(-1, 1))  # -1から1の範囲に正規化する設定
-    scaler.fit(data_train)  # 教師データを元に正規化設定（テストデータは必要ない）
+    mimascaler = MinMaxScaler(feature_range=(-1, 1))  # -1から1の範囲に正規化する設定
+    scaler = mimascaler.fit(data_train)  # 教師データを元に正規化設定（テストデータは必要ない）
 
     # norm→ノーマライゼーション（正規化の略称）
     data_train_norm = scaler.transform(data_train)  # 教師データの正規化

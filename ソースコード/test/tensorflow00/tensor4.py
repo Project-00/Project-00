@@ -74,7 +74,7 @@ mse_train = []          # 空箱にしておく(随時addしていくため）
 mse_test = []           # 上に同じ
 
 # 反復処理数
-epochs = 5000
+epochs = 3000
 for e in range(epochs):
     net.run(opt, feed_dict={X: X_train, Y: Y_train})
 
