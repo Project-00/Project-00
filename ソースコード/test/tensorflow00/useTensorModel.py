@@ -6,11 +6,13 @@ from sklearn.metrics import mean_absolute_error
 import tensorflow as tf
 import os.path
 from trainDataMaker import trainDataMaker
+from testDataMaker import testDataMaker
 
 
 cwd = os.getcwd()
 
-tdm = trainDataMaker("usd_jpy_api.csv")
+# tdm = trainDataMaker("usd_jpy_api.csv")
+tdm = testDataMaker("usd_jpy_api_test.csv")
 
 scaler = tdm[4]
 
