@@ -39,7 +39,7 @@ for index, row in df.iterrows():
     # print('------')
 
 
-    result = insertCollection(colName, row)
+    result = insertCollection(colName, row.to_dict())
 
     # # コレクションにレコードを書き込みます
     # collection.insert(formatToInsert("time",row.time))

@@ -1,4 +1,4 @@
-from . import oandapy
+import oandapy
 import time
 import pymongo
 from pymongo import MongoClient
