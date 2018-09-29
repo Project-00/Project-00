@@ -5,7 +5,8 @@ import sys
 import pandas as pd
 from mongodb_write import getDBCollection
 
-
+# DB(collection)の名前
+colName = 'USD_JPY_RATE'
 
 def ReaDB(collectionName):
 
@@ -18,11 +19,12 @@ def ReaDB(collectionName):
 
     return df
 
-if __name__ == "__main__":
-
-    # DB(collection)の名前
-    colName = 'USD_JPY_RATE'
+def mongodb_read():
 
     df = ReaDB(colName)
 
-    print(df)
+    del df["_id"]
+
+    df2 = df.ix[:,["time","close","open","high","low","volume","weekday"]]
+
+    return df2
