@@ -96,3 +96,5 @@ def makePredictionModel(parameter):
     print('Saved a model.')
 
     net.close()
+
+    return(pred_inv)

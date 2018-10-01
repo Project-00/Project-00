@@ -5,6 +5,7 @@ import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_absolute_error
 from mongodb_read import mongodb_read
+import const as con
 
 # -- 学習データ加工部分 --
 
