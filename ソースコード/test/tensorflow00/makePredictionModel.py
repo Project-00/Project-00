@@ -5,7 +5,7 @@ import tensorflow as tf
 import os.path
 from predictionDataMaker import predictionDataMaker
 
-# parameterの中身 START:始値 CLOSE:終値 HIGH:高値 LOW:安値
+# parameterの中身 OPEN:始値 CLOSE:終値 HIGH:高値 LOW:安値
 def makePredictionModel(parameter):
 
     pdm = predictionDataMaker(parameter)
