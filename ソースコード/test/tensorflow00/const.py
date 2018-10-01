@@ -23,12 +23,17 @@ class _const(object):
     LOW = "LOW"
 
 
+
 import sys
 # 定数型を作成する関数
-sys.modules[__name__] = _const()
+sys.modules["const"] = _const()
 
 
-
-# c = _const()
+# --定数呼び出し方法概要--
 #
-# print(c.OPEN)
+# import const
+# import sys
+#
+# c = sys.modules["const"]
+#
+# print(c.HIGH)
