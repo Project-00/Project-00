@@ -17,9 +17,27 @@ def predictionDataMaker(parameter):
 
     df = mongodb_read()
 
-    # 終値を１日分移動(closeの位置はデータによるので要注意)
+    # parameter毎に順序切り替え
+    if parameter == "CLOSE":
+        df = df.ix[:, ["time", "close", "open", "high", "low", "volume", "weekday"]]
+        prm = ["close"]
+    if parameter == "OPEN":
+        df = df.ix[:, ["time", "open", "close", "high", "low", "volume", "weekday"]]
+        prm = ["open"]
+    if parameter == "HIGH":
+        df = df.ix[:, ["time", "high", "close", "open", "low", "volume", "weekday"]]
+        prm = ["high"]
+    if parameter == "LOW":
+        df = df.ix[:, ["time", "low", "close", "open", "high", "volume", "weekday"]]
+        prm = ["low"]
+    else:
+        print("求めたい要素の指定が存在していません")
+        
+    df_test = df.tail(1)
+
+    # 一番左の列を１日分移動上に(closeの位置はデータによるので要注意)
     df_shift = df.copy()
-    df_shift.close = df_shift.close.shift(-1)
+    df_shift[prm] = df_shift[prm].shift(-1)
 
     # 念のためデータをdf_2として新しいデータフレームへコピー
     # 加工元のデータを変えないようにするための措置
@@ -32,6 +50,10 @@ def predictionDataMaker(parameter):
     del df_2["time"]
     del df_2["weekday"]
     del df_2["volume"]
+    del df_test["time"]
+    del df_test["weekday"]
+    del df_test["volume"]
+
 
 
     # データセットの行数と列を格納
@@ -40,11 +62,13 @@ def predictionDataMaker(parameter):
 
     # 訓練データとテストデータへ切り分け
     train_start = 0
-    train_end = int(np.floor(n * 0.8))  # 前から数えて行全体の８割を教師データとして扱う
-    test_start = train_end + 1  # 教師データ以降のデータをテストデータとして扱う
-    test_end = n
+    train_end = int(np.floor(n))  # 前から数えて行全体の８割を教師データとして扱う
+    # test_start = train_end   # 教師データ以降のデータをテストデータとして扱う
+    # test_end = n
     data_train = df_2[train_start:train_end]  # トレーニングの幅の設定
-    data_test = df_2[test_start:test_end]  # テストの幅の設定
+    # data_test = df_2[test_start:test_end]  # テストの幅の設定
+    # data_train = df_2
+    data_test = df_test  # テストの幅の設定
 
     # データの正規化
     scaler = MinMaxScaler(feature_range=(-1, 1))  # -1から1の範囲に正規化する設定
@@ -82,3 +106,6 @@ def predictionDataMaker(parameter):
 #     print(Y_test)
 #     print(scaler)
 #     print(n_stocks)
+
+# if __name__ == "__main__":
+#     p = predictionDataMaker("OPEN")
