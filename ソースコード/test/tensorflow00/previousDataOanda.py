@@ -6,7 +6,7 @@ oanda = oandapy.API(environment="practice", access_token="806baeb6718f1536579800
 
 if __name__ == "__main__":
 
-    response1 = oanda.get_history(instrument="USD_JPY", granularity="D", count=2)
+    response1 = oanda.get_history(instrument="USD_JPY", granularity="D", count=500)
     USD_JPY_D1 = response1.get("candles")
 
     # 先頭のデータのtimeを取得して、RFC3339フォーマットをpythonのdatetimeフォーマットに変換
@@ -14,7 +14,7 @@ if __name__ == "__main__":
     # もう一度RFC3339フォーマットに変換
     rfc_endtime = dtime.isoformat('T')
 
-    response2 = oanda.get_history(instrument="USD_JPY", granularity="D", end=rfc_endtime, count=2)
+    response2 = oanda.get_history(instrument="USD_JPY", granularity="D", end=rfc_endtime, count=500)
     USD_JPY_D2 = response2.get("candles")
 
     for d in USD_JPY_D2:
