@@ -8,7 +8,7 @@ from mongodb_read import mongodb_read
 
 # -- 学習データ加工部分 --
 
-def predictionDataMaker():
+def predictionDataMaker(parameter):
     # OANDAAPI のドル円１日足を取得して扱いやすくしたデータを用いているため注意。（要工夫）
     # CSVファイルの読み込み（）内で指定
     # 内容の順は time（時間） close（終） open（始） high（高） low（低） volume（取引数）　の順

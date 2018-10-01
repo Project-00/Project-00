@@ -15,7 +15,6 @@ cwd = os.getcwd()
 # tdm = testDataMaker("usd_jpy_api_test.csv")
 tdm = trainDataMaker()
 
-
 scaler = tdm[4]
 
 # 説明関数の要素数（列数）
