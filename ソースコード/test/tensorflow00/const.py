@@ -17,25 +17,18 @@ class _const(object):
             raise NameError(name)
 
 
+    OPEN = "OPEN"
+    CLOSE = "CLOSE"
+    HIGH = "HIGH"
+    LOW = "LOW"
+
+
 import sys
 # 定数型を作成する関数
-def const(Name):
-    sys.modules[__name__] = _const()
+sys.modules[__name__] = _const()
 
-    # _const.START = "START"
 
-    const.Name = str(Name)
 
-    return const.Name
-
-c = const
-
-START = c("START")
-CLOSE = c("CLOSE")
-HIGH = c("HIGH")
-LOW = c("LOW")
-
-print(START)
-print(CLOSE)
-print(HIGH)
-print(LOW)
+# c = _const()
+#
+# print(c.OPEN)
