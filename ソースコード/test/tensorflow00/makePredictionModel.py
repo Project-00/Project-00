@@ -98,3 +98,6 @@ def makePredictionModel(parameter):
     net.close()
 
     return(pred_inv)
+
+# if __name__ == "__main__":
+#     a = makePredictionModel("OPEN")

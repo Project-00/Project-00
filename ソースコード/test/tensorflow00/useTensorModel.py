@@ -85,7 +85,3 @@ pred_inv = scaler.inverse_transform(pred_Prediction)
 print(pred_inv)
 # 読み方は左から close open high low vol
 
-
-
-
-

@@ -32,7 +32,7 @@ def predictionDataMaker(parameter):
         df = df.ix[:, ["time", "low", "close", "open", "high", "volume", "weekday"]]
         prm = ["low"]
     else:
-        print("求めたい要素の指定が存在していません")
+        print(parameter + "を計算します")
         
     df_test = df.tail(1)
 
