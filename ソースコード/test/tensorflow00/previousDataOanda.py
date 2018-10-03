@@ -60,6 +60,13 @@ def historyData(parame,count,nowday):
         １年分一括で取得しようとするとweekdayが上手く登録できない
         改善案１
         2重for文にして1件ずつ取得＆登録を繰り返す処理にする
+        
+        for D in USD_JPY_D1:
+            dict = changeListForDict(D,weekday)
+            
+            
+        
+        
         気になる点
         処理が確実に遅くなると思われる
         改善案２
