@@ -10,9 +10,9 @@ oanda = oandapy.API(environment="practice", access_token="806baeb6718f1536579800
 
 # oandaから出てきたリストを加工する関数
 def changeListForDict(list, weekday):
-    d = {"time": list[0].get('time'), "close": list[0].get('closeBid'), 'open': list[0].get('openBid'),
-         'high': list[0].get('highBid'), 'low': list[0].get('lowBid'),
-         'volume': list[0].get('volume'), 'weekday': weekday}
+    d = {"time": list.get('time'), "close": list.get('closeBid'), 'open': list.get('openBid'),
+         'high': list.get('highBid'), 'low': list.get('lowBid'),
+         'volume': list.get('volume'), 'weekday': weekday}
 
     return d
 
@@ -55,6 +55,19 @@ def historyData(parame,count,nowday):
             result = insertCollection("USD_JPY_RATE", d)
 
 
+        """
+        問題点１
+        １年分一括で取得しようとするとweekdayが上手く登録できない
+        改善案１
+        2重for文にして1件ずつ取得＆登録を繰り返す処理にする
+        気になる点
+        処理が確実に遅くなると思われる
+        改善案２
+        ぶっちゃけweekdayのデータ要らない説
+        
+        問題点２
+        リストをまとめてdict型に処理できるのか分からない。
+        """
 
 
 
