@@ -27,7 +27,7 @@ weekday = datetime.strptime(time.replace('/', '-') + " 06:00:00", '%Y-%m-%d %H:%
 # 登録の重複を防ぐための措置
 check = mongodb_read()
 last = len(check) - 1
-# 最新データはモンゴの最後尾に登録されてしまうのでtail(1)で指定すること
+# 最新データは最後尾にあるのに注意
 if (check.iloc[last,0] != time):
     # 登録するための辞書作成
     d = {"time": time, "close": USD_JPY_D1[0].get('closeBid'), 'open': USD_JPY_D1[0].get('openBid'),
