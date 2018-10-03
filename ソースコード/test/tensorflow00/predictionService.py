@@ -10,6 +10,7 @@ from makeStudyData import GetDate
 import numpy as np
 from datetime import datetime
 from mongodb_write import insertCollection
+from mongodb_read import mongodb_read
 
 # 下の層はオアンダの履歴を遡ってデータを取得し、データを加工、USD_JPY_RATEというテーブルの中へ格納する
 import oandapy
@@ -23,10 +24,20 @@ USD_JPY_D1 = response1.get("candles")
 time = USD_JPY_D1[0].get("time")[0:10].replace('-', '/')
 weekday = datetime.strptime(time.replace('/', '-') + " 06:00:00", '%Y-%m-%d %H:%M:%S').weekday()
 
-# 登録するための辞書作成
-d = {"time":time, "close":USD_JPY_D1[0].get('closeBid'), 'open':USD_JPY_D1[0].get('openBid'), 'high':USD_JPY_D1[0].get('highBid'), 'low':USD_JPY_D1[0].get('lowBid'),'volume':USD_JPY_D1[0].get('volume'),'weekday':weekday}
+# 登録の重複を防ぐための措置
+check = mongodb_read()
+last = len(check) - 1
+# 最新データはモンゴの最後尾に登録されてしまうのでtail(1)で指定すること
+if (check.iloc[last,0] != time):
+    # 登録するための辞書作成
+    d = {"time": time, "close": USD_JPY_D1[0].get('closeBid'), 'open': USD_JPY_D1[0].get('openBid'),
+         'high': USD_JPY_D1[0].get('highBid'), 'low': USD_JPY_D1[0].get('lowBid'),
+         'volume': USD_JPY_D1[0].get('volume'), 'weekday': weekday}
 
-result1 = insertCollection("USD_JPY_RATE",d)
+    result1 = insertCollection("USD_JPY_RATE", d)
+
+
+
 
 # 定数型の文字列を呼び出す(OPEN,CLOSE,HIGH,LOW)が入ってる　例：c.OPEN
 c = sys.modules["const"]
@@ -46,9 +57,11 @@ P_CLOSE = P_CLOSE[:,0].astype(np.float64)
 P_HIGH = P_HIGH[:,0].astype(np.float64)
 P_LOW = P_LOW[:,0].astype(np.float64)
 
-# 辞書キーの作成
-p= {"time":P_TIME, "close":P_CLOSE[0], "open":P_OPEN[0], "high":P_HIGH[0], "low":P_LOW[0]}
+if (check.iloc[last,0] != time):
+    # 辞書キーの作成
+    p = {"time": P_TIME, "close": P_CLOSE[0], "open": P_OPEN[0], "high": P_HIGH[0], "low": P_LOW[0]}
 
-result1 = insertCollection("P_USD_JPY_RATE",p)
+    result1 = insertCollection("P_USD_JPY_RATE", p)
+
 
 

@@ -24,7 +24,7 @@ def GetDate():
     #日にちの取得
     getnow = datetime.now(DLT)
 
-    gettime = getnow.strftime('%Y-%m-%d')
+    gettime = getnow.strftime('%Y/%m/%d')
     #確認出力
     #print(gettime)
 
