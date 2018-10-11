@@ -16,13 +16,16 @@ class _const(object):
                 raise self.ConstError("Can't unbind const(%s)" % name)
             raise NameError(name)
 
-
+    # 4本値定数
     OPEN = "OPEN"
     CLOSE = "CLOSE"
     HIGH = "HIGH"
     LOW = "LOW"
 
-
+    # 取得形式
+    YEAR = "Y"
+    MONTH = "M"
+    DAY = "D"
 
 import sys
 # 定数型を作成する関数

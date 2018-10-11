@@ -34,7 +34,7 @@ if (check.iloc[last,0] != time):
          'high': USD_JPY_D1[0].get('highBid'), 'low': USD_JPY_D1[0].get('lowBid'),
          'volume': USD_JPY_D1[0].get('volume'), 'weekday': weekday}
 
-    result1 = insertCollection("USD_JPY_RATE", d)
+    result1 = insertCollection("USD_JPY_RATEhttps://www.youtube.com/watch?v=aYZythHxpwQ", d)
 
 
 
