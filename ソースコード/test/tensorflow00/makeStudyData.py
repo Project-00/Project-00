@@ -1,5 +1,7 @@
 import datetime
-from datetime import datetime, timedelta, timezone
+from datetime import datetime as dt
+from datetime import timedelta
+from datetime import timezone
 from pymongo import MongoClient
 from mongodb_write import getDBCollection
 from mongodb_write import insertCollection
@@ -10,7 +12,7 @@ from mongodb_write import insertCollection
 def GetHour():
 
     #時の取得
-    gethour = datetime.now().hour
+    gethour = dt.now().hour
     #確認出力
     #print(gethour)
 
@@ -22,7 +24,7 @@ def GetDate():
     DLT = timezone(timedelta(hours=+0), 'DLT')
 
     #日にちの取得
-    getnow = datetime.now(DLT)
+    getnow = dt.now(DLT)
 
     gettime = getnow.strftime('%Y/%m/%d')
     #確認出力
@@ -56,13 +58,27 @@ def GetDocSingleData(clmData,docKey,ad):
 def GetDayoftheweek():
     DLT = timezone(timedelta(hours=+0), 'DLT')
     #曜日データ取得
-    Dotw = datetime.now(DLT)
+    Dotw = dt.now(DLT)
     getDotw = Dotw.weekday()
 
     return getDotw
 
+# 日付をずらす関数
+def LateDate(nowDay):
+
+    # 現在の日付を入力した際、0日になるのを回避するため（1日の時等に0日になってしまう）
+    NowDay = nowDay - 1
+    DLT = timezone(timedelta(hours=+0), 'DLT')
+
+    #日にちの取得
+    getnow = dt.now(DLT) - timedelta(days=NowDay)
 
 
+    gettime = getnow
+    #確認出力
+    #print(gettime)
+
+    return gettime
 
 
 
