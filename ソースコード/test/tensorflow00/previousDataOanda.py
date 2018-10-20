@@ -24,6 +24,8 @@ def ListWriteForMongo(list,workcount):
         # USD_JPY_RATEに格納
         result = insertCollection("USD_JPY_RATE", d)
 
+    print("１年分登録完了")
+
     return result
 
 
@@ -106,8 +108,9 @@ def historyData(prm,count,nowDay):
 
 
 #
-if __name__ == "__main__":
-
-    result = historyData(c.YEAR,1,18)
-
-    print(result)
+# if __name__ == "__main__":
+#
+#     # 引数は　年月日コード　取りたい年数分　当日以前ならば１、月の頭（１日）からなら現在日付けを入力
+#     result = historyData(c.YEAR,12,1)
+#
+#     print("終わりました")
