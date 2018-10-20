@@ -8,6 +8,7 @@ from mongodb_write import insertCollection
 
 
 
+
 # 時間を取る関数
 def GetHour():
 

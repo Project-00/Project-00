@@ -11,7 +11,7 @@ import numpy as np
 from datetime import datetime
 from mongodb_write import insertCollection
 from mongodb_read import mongodb_read
-from previousDataOanda import historyData
+from previousDataOanda import historyData , ListWriteForMongo
 
 # 下の層はオアンダの履歴を遡ってデータを取得し、データを加工、USD_JPY_RATEというテーブルの中へ格納する
 import oandapy
@@ -36,7 +36,7 @@ last = len(check) - 1
 # 最新データは最後尾にあるのに注意
 if (check.iloc[last,0] != time):
 
-    result1 = historyData(c.DAY,1,1)
+    result1 = ListWriteForMongo(USD_JPY_D1,1)
 
     # # 登録するための辞書作成
     # d = {"time": time, "close": USD_JPY_D1[0].get('closeBid'), 'open': USD_JPY_D1[0].get('openBid'),
