@@ -36,8 +36,8 @@ def predictionDataMaker(parameter):
     if parameter == c.LOW:
         df = df.ix[:, ["time", "low", "close", "open", "high", "volume"]]
         prm = ["low"]
-    else:
-        print(parameter + "を計算します")
+
+    print(parameter + "を計算します")
         
     df_test = df.tail(1)
 
@@ -50,8 +50,8 @@ def predictionDataMaker(parameter):
     df_2 = df_shift.copy()
 
     # 最後尾はいらないので除去
-    lastnum = len(df_2) - 1  # データ行数を求める（個数　-　1）で最後行を見つける
-    df_2 = df_2.drop(lastnum)
+    lastnum = len(df_2) - 1 # データ行数を求める（個数　-　1）で最後行を見つける
+    df_2 = df_2.drop(lastnum)  # データの最後尾を削除する
     # time(時間)を消去
     del df_2["time"]
     # del df_2["weekday"]
