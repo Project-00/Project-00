@@ -31,6 +31,7 @@ time = USD_JPY_D1[0].get("time")[0:10].replace('-', '/')
 # 登録の重複を防ぐための措置
 check = mongodb_read()
 check = check.sort_values(by="time")
+check = check.reset_index()
 last = len(check) - 1
 # 最新データは最後尾にあるのに注意
 if (check.iloc[last,0] != time):

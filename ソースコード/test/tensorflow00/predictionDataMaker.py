@@ -21,6 +21,7 @@ def predictionDataMaker(parameter):
 
     df = mongodb_read()
     df = df.sort_values(by="time")
+    df = df.reset_index()
 
 
     # parameter毎に順序切り替え
