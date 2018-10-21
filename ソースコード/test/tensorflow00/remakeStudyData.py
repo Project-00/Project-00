@@ -11,6 +11,7 @@ collection = mongodb_write.getDBCollection(c.STUDY_COL)
 
 # データ削除
 collection.remove()
+print("既存データの削除をしました")
 
 # データ登録
 result = previousDataOanda.historyData(c.YEAR, 20, 1)

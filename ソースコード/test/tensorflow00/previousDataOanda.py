@@ -123,6 +123,6 @@ def historyData(prm,count,nowDay):
 # if __name__ == "__main__":
 #
 #     # 引数は　年月日コード　取りたい年数分　当日以前ならば１、月の頭（１日）からなら現在日付けを入力
-#     result = historyData(c.YEAR,12,1)
+#     result = historyData(c.YEAR,20,1)
 #
 #     print("終わりました")

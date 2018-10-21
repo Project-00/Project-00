@@ -20,6 +20,8 @@ def predictionDataMaker(parameter):
     c=sys.modules["const"]
 
     df = mongodb_read()
+    df = df.sort_values(by="time")
+
 
     # parameter毎に順序切り替え
     if parameter == c.CLOSE:

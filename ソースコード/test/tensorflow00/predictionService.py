@@ -7,6 +7,7 @@ from makePredictionModel import makePredictionModel
 import sys
 from makeStudyData import GetDate
 import numpy as np
+import pandas as pd
 from mongodb_write import insertCollection
 from mongodb_read import mongodb_read
 from previousDataOanda import historyData , ListWriteForMongo
@@ -29,6 +30,7 @@ time = USD_JPY_D1[0].get("time")[0:10].replace('-', '/')
 
 # 登録の重複を防ぐための措置
 check = mongodb_read()
+check = check.sort_values(by="time")
 last = len(check) - 1
 # 最新データは最後尾にあるのに注意
 if (check.iloc[last,0] != time):
