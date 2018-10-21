@@ -5,7 +5,7 @@ import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_absolute_error
 from mongodb_read import mongodb_read
-import const as con
+import sys
 
 # -- 学習データ加工部分 --
 
@@ -16,20 +16,23 @@ def predictionDataMaker(parameter):
     # 要素を増やすことでより精度が上がる模様
     # df = pd.read_csv("./__csv__/" + csvfile)
 
+    # 定数呼び出し
+    c=sys.modules["const"]
+
     df = mongodb_read()
 
     # parameter毎に順序切り替え
-    if parameter == "CLOSE":
-        df = df.ix[:, ["time", "close", "open", "high", "low", "volume", "weekday"]]
+    if parameter == c.CLOSE:
+        df = df.ix[:, ["time", "close", "open", "high", "low", "volume"]]
         prm = ["close"]
-    if parameter == "OPEN":
-        df = df.ix[:, ["time", "open", "close", "high", "low", "volume", "weekday"]]
+    if parameter == c.OPEN:
+        df = df.ix[:, ["time", "open", "close", "high", "low", "volume"]]
         prm = ["open"]
-    if parameter == "HIGH":
-        df = df.ix[:, ["time", "high", "close", "open", "low", "volume", "weekday"]]
+    if parameter == c.HIGH:
+        df = df.ix[:, ["time", "high", "close", "open", "low", "volume"]]
         prm = ["high"]
-    if parameter == "LOW":
-        df = df.ix[:, ["time", "low", "close", "open", "high", "volume", "weekday"]]
+    if parameter == c.LOW:
+        df = df.ix[:, ["time", "low", "close", "open", "high", "volume"]]
         prm = ["low"]
     else:
         print(parameter + "を計算します")
@@ -49,11 +52,10 @@ def predictionDataMaker(parameter):
     df_2 = df_2.drop(lastnum)
     # time(時間)を消去
     del df_2["time"]
-    del df_2["weekday"]
-    del df_2["volume"]
+    # del df_2["weekday"]
     del df_test["time"]
-    del df_test["weekday"]
-    del df_test["volume"]
+    # del df_test["weekday"]
+
 
 
 

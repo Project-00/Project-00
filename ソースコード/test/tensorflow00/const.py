@@ -16,6 +16,12 @@ class _const(object):
                 raise self.ConstError("Can't unbind const(%s)" % name)
             raise NameError(name)
 
+    # DB情報
+    STUDY_COL = "USD_JPY_RATE"
+    PREDICTION_COL = "P_USD_JPY_RATE"
+    IP_ADDRESS = "54.69.191.130"
+    PORT = 27017
+
     # 4本値定数
     OPEN = "OPEN"
     CLOSE = "CLOSE"

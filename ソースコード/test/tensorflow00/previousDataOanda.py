@@ -14,17 +14,17 @@ oanda = oandapy.API(environment="practice", access_token="806baeb6718f1536579800
 c = sys.modules["const"]
 
 # oandaから出てきたリストを加工する関数
-def ListWriteForMongo(list,workcount):
-    for j in range(workcount):
+def ListWriteForMongo(list):
+    for j in range(len(list)):
 
-        d = {"time": list[j].get('time'), "close": list[j].get('closeBid'), 'open': list[j].get('openBid'),
+        d = {"time": list[j].get('time')[:10].replace('-','/'), "close": list[j].get('closeBid'), 'open': list[j].get('openBid'),
              'high': list[j].get('highBid'), 'low': list[j].get('lowBid'),
              'volume': list[j].get('volume')}
 
         # USD_JPY_RATEに格納
         result = insertCollection("USD_JPY_RATE", d)
 
-    print("１年分登録完了")
+    # print("１年分登録完了")
 
     return result
 
@@ -48,14 +48,20 @@ def historyData(prm,count,nowDay):
         one_year_ago = endtime - relativedelta(months=12)
         workcount = workdays.networkdays(one_year_ago, endtime)
         endtime = Time.isoformat('T')
+
+        # 登録データ
+        usdJpyDataList = []
+
         # countの数だけ年数を遡ってデータを取得する
         for i in range(count):
 
             response = oanda.get_history(instrument = "USD_JPY", granularity = "D",end= endtime, count= workcount)
             USD_JPY_D1 = response.get("candles")
 
-            # list(USD_JPY_D1)をdict型にデータを抜き出し加工する
-            d = ListWriteForMongo(USD_JPY_D1,workcount)
+            # # list(USD_JPY_D1)をdict型にデータを抜き出し加工する
+            # d = ListWriteForMongo(USD_JPY_D1)
+            for j in USD_JPY_D1:
+                usdJpyDataList.append(j)
 
             # weekday = dt.strptime(endtime.replace('/', '-') + " 06:00:00", '%Y-%m-%d %H:%M:%S').weekday()
 
@@ -67,6 +73,12 @@ def historyData(prm,count,nowDay):
             workcount = workdays.networkdays(one_year_ago, dtime)
             # もう一度RFC3339フォーマットに変換
             endtime = dtime.isoformat('T')
+
+        # リストを日付順にソートする
+        usdJpyDataList.sort(key=lambda x: x['time'])
+
+        # list(USD_JPY_D1)をdict型にデータを抜き出し加工する
+        d = ListWriteForMongo(usdJpyDataList)
 
 
     # 年同様の動きをする
@@ -81,7 +93,7 @@ def historyData(prm,count,nowDay):
             USD_JPY_D1 = response.get("candles")
 
             # list(USD_JPY_D1)をdict型にデータを抜き出し加工する
-            d = ListWriteForMongo(USD_JPY_D1,workcount)
+            d = ListWriteForMongo(USD_JPY_D1)
 
             # USD_JPY_RATEに格納
             result = insertCollection("USD_JPY_RATE", d)
@@ -101,7 +113,7 @@ def historyData(prm,count,nowDay):
         USD_JPY_D1 = response.get("candles")
 
         # list(USD_JPY_D1)をdict型にデータを抜き出し加工する
-        d = ListWriteForMongo(USD_JPY_D1,1)
+        d = ListWriteForMongo(USD_JPY_D1)
 
         # USD_JPY_RATEに格納
         result = insertCollection("USD_JPY_RATE", d)

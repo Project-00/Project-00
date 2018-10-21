@@ -1,13 +1,15 @@
 from pymongo import MongoClient
+import sys
 
 
 #DBの書き込み先を取得する
 def getDBCollection(collectionName):
+    c=sys.modules["const"]
 
     # LocalhostのMongoDBに書き込みます
 
 
-    client = MongoClient("54.69.191.130",27017)
+    client = MongoClient(c.IP_ADDRESS,c.PORT)
 
     # test_databaseというDBを使います
     db = client.AUTO_TRADE_DB

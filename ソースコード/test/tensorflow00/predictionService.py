@@ -4,18 +4,15 @@
 # それぞれの要素のモデルの再教育を施す機能
 
 from makePredictionModel import makePredictionModel
-import const
 import sys
 from makeStudyData import GetDate
 import numpy as np
-from datetime import datetime
 from mongodb_write import insertCollection
 from mongodb_read import mongodb_read
 from previousDataOanda import historyData , ListWriteForMongo
 
 # 下の層はオアンダの履歴を遡ってデータを取得し、データを加工、USD_JPY_RATEというテーブルの中へ格納する
 import oandapy
-import pandas as pd
 
 oanda = oandapy.API(environment="practice", access_token="806baeb6718f153657980002fea49c6c-2cf6534cb404c014c63931f73fa3def7")
 
@@ -36,7 +33,7 @@ last = len(check) - 1
 # 最新データは最後尾にあるのに注意
 if (check.iloc[last,0] != time):
 
-    result1 = ListWriteForMongo(USD_JPY_D1,1)
+    result1 = ListWriteForMongo(USD_JPY_D1)
 
     # # 登録するための辞書作成
     # d = {"time": time, "close": USD_JPY_D1[0].get('closeBid'), 'open': USD_JPY_D1[0].get('openBid'),
@@ -67,7 +64,7 @@ if (check.iloc[last,0] != time):
     # 辞書キーの作成
     p = {"time": P_TIME, "close": P_CLOSE[0], "open": P_OPEN[0], "high": P_HIGH[0], "low": P_LOW[0]}
 
-    result1 = insertCollection("P_USD_JPY_RATE", p)
+    result1 = insertCollection(c.PREDICTION_COL, p)
 
 
 
