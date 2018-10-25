@@ -21,6 +21,8 @@ class _const(object):
     PREDICTION_COL = "P_USD_JPY_RATE"
     IP_ADDRESS = "54.69.191.130"
     PORT = 27017
+    ID = ""
+    PASS = ""
 
     # 4本値定数
     OPEN = "OPEN"
