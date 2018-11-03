@@ -9,6 +9,25 @@ from sklearn import *
 # この関数を使うときは、USD_JPY_RATEの状態を最新状態にする必要がある。
 # 順序的に言えば、USD_JPY_RATEの更新→平均の算出でなければ正確な値は出ない
 
+# ２５日移動平均を求める関数
+def twentyfiveAverage(time):
+    # keyには要素日付呼び出し
+    twentyfiveaverage = mongodb_read()
+    twentyfiveaverage = twentyfiveaverage.sort_values(by="time")
+    twentyfiveaverage = twentyfiveaverage.reset_index()
+    # 日付ラベルから要素の番号を取り出す
+    key = twentyfiveaverage.get_loc(time)
+    # 引数の日付から25日遡って25日分範囲指定
+    twentyfiveaverage = twentyfiveaverage[key - 25:key]
+    # closeの部分を取り出す
+    twentyfiveaverage = twentyfiveaverage.close
+
+    # 終値の平均を算出する処理
+    twentyfiveaverage = twentyfiveaverage.mean()
+
+    return twentyfiveaverage
+
+
 # １０日移動平均を求める関数
 def tenAverage(time):
     # keyには要素日付を呼び出し
