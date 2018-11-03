@@ -10,8 +10,7 @@ def getDBCollection(collectionName):
 
 
     client = MongoClient(c.IP_ADDRESS,c.PORT)
-
-    # test_databaseというDBを使います
+    client.admin.authenticate(c.ID, c.PASS)
     db = client.AUTO_TRADE_DB
 
     #コレクションの作成
