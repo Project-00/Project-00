@@ -19,6 +19,7 @@ class _const(object):
     # DB情報
     STUDY_COL = "USD_JPY_RATE"
     PREDICTION_COL = "P_USD_JPY_RATE"
+    MOVINGAVERAGE_COL = "M_USD_JPY_RATE"
     IP_ADDRESS = "54.69.191.130"
     PORT = 27017
     ID = "autoTrade"
@@ -29,6 +30,11 @@ class _const(object):
     CLOSE = "CLOSE"
     HIGH = "HIGH"
     LOW = "LOW"
+    # 追加要素
+    VOLUME = "volume"       # 取引数
+    FIVEAVE = "fiveave"     # 5日平均
+    TENAVE = "tenave"       # 10日平均
+    TWENAVE = "twenave"     # 25日平均
 
     # 取得形式
     YEAR = "Y"
