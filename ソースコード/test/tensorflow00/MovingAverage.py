@@ -15,6 +15,24 @@ import sys
 
 c = sys.modules["const"]
 
+# 汎化型day日平均を求める関数
+# 整頓されたデータフレーム型を対象とする
+# key: 要素番号（ループ処理で利用）
+# day: 何日平均で取りたいかを入力
+# df: ソートして整頓されたデータフレームを引数に入れること
+def Average(key,day,df):
+
+    # 要素番号（日付順）をday分遡って範囲を指定する
+    Ave = df[key - day:key]
+    # closeの部分を取り出す
+    Ave = Ave.close
+
+    result = Ave.mean()
+
+    return result
+
+
+
 # ２５日移動平均を求める関数
 def twentyfiveAverage(key,df):
     # keyには要素日付呼び出し
