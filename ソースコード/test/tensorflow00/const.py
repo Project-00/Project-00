@@ -31,10 +31,10 @@ class _const(object):
     HIGH = "HIGH"
     LOW = "LOW"
     # 追加要素
-    VOLUME = "volume"       # 取引数
-    FIVEAVE = "fiveave"     # 5日平均
-    TENAVE = "tenave"       # 10日平均
-    TWENAVE = "twenave"     # 25日平均
+    VOLUME = "VOLUME"       # 取引数
+    FIVEAVE = "FIVEAVERAGE"     # 5日平均
+    TENAVE = "TENAVERAGE"       # 10日平均
+    TWENAVE = "TWENTYFIVEAVERAGE"     # 25日平均
 
     # 取得形式
     YEAR = "Y"

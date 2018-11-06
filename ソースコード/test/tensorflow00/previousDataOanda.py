@@ -6,6 +6,7 @@ from dateutil.relativedelta import relativedelta
 from makeStudyData import LateDate
 from mongodb_write import insertCollection
 import workdays
+from MovingAverage import ListAverage
 import const
 import sys
 
@@ -13,18 +14,37 @@ oanda = oandapy.API(environment="practice", access_token="806baeb6718f1536579800
 # 定数定義呼び出し
 c = sys.modules["const"]
 
-# oandaから出てきたリストを加工する関数
-def ListWriteForMongo(list):
-    for j in range(len(list)):
+# five = 5日移動平均
+# ten = 10日移動平均
+# twen = 25日移動平均
+# 一日分だけ登録する
+def oneListWriteForMongo(list1,five,ten,twen):
+    d = {"time": list1[0].get('time')[:10].replace('-', '/'), "close": list1[0].get('closeBid'),
+         'open': list1[0].get('openBid'),
+         'high': list1[0].get('highBid'), 'low': list1[0].get('lowBid'),
+         'volume': list1[0].get('volume'), 'fiveave': five[0], 'tenave': ten[0], 'twenave': twen[0]}
 
-        d = {"time": list[j].get('time')[:10].replace('-','/'), "close": list[j].get('closeBid'), 'open': list[j].get('openBid'),
-             'high': list[j].get('highBid'), 'low': list[j].get('lowBid'),
-             'volume': list[j].get('volume')}
+    # USD_JPY_RATEに格納
+    result = insertCollection("USD_JPY_RATE", d)
 
+    return result
+
+
+
+# oandaから出てきたリストと移動平均のリストを一括で加工する関数
+def ListWriteForMongo(list1,list2,list3,list4):
+    # 移動平均用のループカウンタ
+    k = 0
+    # 25番目からスタートして最後まで（25日平均に合わせる）
+    for j in range(25,len(list1)):
+
+        d = {"time": list1[j].get('time')[:10].replace('-','/'), "close": list1[j].get('closeBid'), 'open': list1[j].get('openBid'),
+             'high': list1[j].get('highBid'), 'low': list1[j].get('lowBid'),
+             'volume': list1[j].get('volume'),'fiveave':list2[k],'tenave':list3[k],'twenave':list4[k]}
+        # 移動平均用のループ更新
+        k+=1
         # USD_JPY_RATEに格納
         result = insertCollection("USD_JPY_RATE", d)
-
-    # print("１年分登録完了")
 
     return result
 
@@ -51,6 +71,9 @@ def historyData(prm,count,nowDay):
 
         # 登録データ
         usdJpyDataList = []
+        fiveList = []
+        tenList = []
+        twenList = []
 
         # countの数だけ年数を遡ってデータを取得する
         for i in range(count):
@@ -77,8 +100,28 @@ def historyData(prm,count,nowDay):
         # リストを日付順にソートする
         usdJpyDataList.sort(key=lambda x: x['time'])
 
-        # list(USD_JPY_D1)をdict型にデータを抜き出し加工する
-        d = ListWriteForMongo(usdJpyDataList)
+        # 5日平均、10日平均、25日平均のリストを作成
+        # 25日平均に合わせて要素を削除
+        Closelist = usdJpyDataList.get("close")
+        for i in range(5,len(Closelist)):
+            five = ListAverage(i,5,Closelist)
+            fiveList.append(five)
+        del fiveList[:20]
+
+        for j in range(10,len(Closelist)):
+            ten = ListAverage(j,10,len(Closelist))
+            tenList.append(ten)
+        del tenList[:15]
+
+        for k in range(25,len(Closelist)):
+            twen = ListAverage(k,25,len(Closelist))
+            twenList.append(twen)
+
+        # list1(USD_JPY_D1)をdict型にデータを抜き出し加工する
+        # list2(fiveAve)
+        # list3(tenAve)
+        # list4(twenAve)
+        d = ListWriteForMongo(usdJpyDataList,fiveList,tenList,twenList)
 
 
     # 年同様の動きをする

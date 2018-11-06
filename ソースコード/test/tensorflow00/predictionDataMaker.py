@@ -26,23 +26,32 @@ def predictionDataMaker(parameter):
 
     # parameter毎に順序切り替え
     if parameter == c.CLOSE:
-        df = df.ix[:, ["time", "close", "open", "high", "low", "volume"]]
+        df = df.ix[:, ["time", "close", "open", "high", "low", "volume","fiveave","tenave","twenave"]]
         prm = ["close"]
     if parameter == c.OPEN:
-        df = df.ix[:, ["time", "open", "close", "high", "low", "volume"]]
+        df = df.ix[:, ["time", "open", "close", "high", "low", "volume","fiveave","tenave","twenave"]]
         prm = ["open"]
     if parameter == c.HIGH:
-        df = df.ix[:, ["time", "high", "close", "open", "low", "volume"]]
+        df = df.ix[:, ["time", "high", "close", "open", "low", "volume","fiveave","tenave","twenave"]]
         prm = ["high"]
     if parameter == c.LOW:
-        df = df.ix[:, ["time", "low", "close", "open", "high", "volume"]]
+        df = df.ix[:, ["time", "low", "close", "open", "high", "volume","fiveave","tenave","twenave"]]
         prm = ["low"]
+    if parameter == c.FIVEAVE:
+        df = df.ix[:, ["time", "fiveave", "close", "open", "high", "volume","low","tenave","twenave"]]
+        prm = ["fiveave"]
+    if parameter == c.TENAVE:
+        df = df.ix[:, ["time", "tenave", "close", "open", "high", "volume","low","fiveave","twenave"]]
+        prm = ["tenave"]
+    if parameter == c.TWENAVE:
+        df = df.ix[:, ["time", "twenave", "close", "open", "high", "volume","low","fiveave","tenave"]]
+        prm = ["twenave"]
 
     print(parameter + "を計算します")
         
     df_test = df.tail(1)
 
-    # 一番左の列を１日分移動上に(closeの位置はデータによるので要注意)
+    # 一番左の列を１日分移動上に(prmの位置はデータによるので要注意)
     df_shift = df.copy()
     df_shift[prm] = df_shift[prm].shift(-1)
 
@@ -55,10 +64,7 @@ def predictionDataMaker(parameter):
     df_2 = df_2.drop(lastnum)  # データの最後尾を削除する
     # time(時間)を消去
     del df_2["time"]
-    # del df_2["weekday"]
     del df_test["time"]
-    # del df_test["weekday"]
-
 
 
 

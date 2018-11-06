@@ -10,7 +10,8 @@ import numpy as np
 import pandas as pd
 from mongodb_write import insertCollection
 from mongodb_read import mongodb_read
-from previousDataOanda import historyData , ListWriteForMongo
+from previousDataOanda import historyData , oneListWriteForMongo
+from MovingAverage import ListAverage
 
 # 下の層はオアンダの履歴を遡ってデータを取得し、データを加工、USD_JPY_RATEというテーブルの中へ格納する
 import oandapy
@@ -36,9 +37,23 @@ last = len(check) - 1
 # 最新データは最後尾にあるのに注意
 if (check.iloc[last,0] != time):
 
+    newCloseDataList = check["close"].tolist
+    newCloseDataList = newCloseDataList.append(USD_JPY_D1[0].get("close"))
 
+    # 単純移動平均を作る関数
+    fiveAve = []
+    tenAve = []
+    twenAve = []
 
-    result1 = ListWriteForMongo(USD_JPY_D1)
+    five = ListAverage(last+1,5,newCloseDataList["close"])
+    ten = ListAverage(last+1,10,newCloseDataList["close"])
+    twen = ListAverage(last+1,25,newCloseDataList["close"])
+
+    fiveAve.append(five)
+    tenAve.append(ten)
+    twenAve.append(twen)
+
+    result1 = oneListWriteForMongo(USD_JPY_D1,fiveAve,tenAve,twenAve)
 
     # # 登録するための辞書作成
     # d = {"time": time, "close": USD_JPY_D1[0].get('closeBid'), 'open': USD_JPY_D1[0].get('openBid'),
@@ -55,6 +70,9 @@ P_OPEN = makePredictionModel(c.OPEN)
 P_CLOSE = makePredictionModel(c.CLOSE)
 P_HIGH = makePredictionModel(c.HIGH)
 P_LOW = makePredictionModel(c.LOW)
+P_FIVEAVE = makePredictionModel(c.FIVEAVE)
+P_TENAVE = makePredictionModel(c.TENAVE)
+P_TWENAVE = makePredictionModel(c.TWENAVE)
 
 #　時間を取得→実行時間の設定に使うかも？
 P_TIME = GetDate()
@@ -64,10 +82,15 @@ P_OPEN = P_OPEN[:,0].astype(np.float64)
 P_CLOSE = P_CLOSE[:,0].astype(np.float64)
 P_HIGH = P_HIGH[:,0].astype(np.float64)
 P_LOW = P_LOW[:,0].astype(np.float64)
+P_FIVEAVE = P_FIVEAVE[:0].astype(np.float64)
+P_TENAVE = P_TENAVE[:0].astype(np.float64)
+P_TWENAVE = P_TWENAVE[:0].astype(np.float64)
 
 if (check.iloc[last,0] != time):
     # 辞書キーの作成
-    p = {"time": P_TIME, "close": P_CLOSE[0], "open": P_OPEN[0], "high": P_HIGH[0], "low": P_LOW[0]}
+    p = {"time": P_TIME, "close": P_CLOSE[0], "open": P_OPEN[0], "high": P_HIGH[0], "low": P_LOW[0],"fiveave": P_FIVEAVE[0],
+         "tenave": P_TENAVE[0],"twenave": P_TWENAVE[0]
+         }
 
     result1 = insertCollection(c.PREDICTION_COL, p)
 

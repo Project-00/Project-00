@@ -98,11 +98,11 @@ def MakeMovingAverage():
 
         result = insertCollection(c.MOVINGAVERAGE_COL, d)
 
-if __name__ == "__main__":
-
-    collection = mongodb_write.getDBCollection(c.MOVINGAVERAGE_COL)
-    collection.remove()
-    result = MakeMovingAverage()
+# if __name__ == "__main__":
+#
+#     collection = mongodb_write.getDBCollection(c.MOVINGAVERAGE_COL)
+#     collection.remove()
+#     result = MakeMovingAverage()
 
     # if文で3日前が5日>10日の時、5日<10日の時
     # if文で2日前が5>10,5<10の時
