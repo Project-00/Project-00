@@ -25,6 +25,6 @@ def mongodb_read():
 
     del df["_id"]
 
-    df2 = df.ix[:,["time","close","open","high","low","volume"]]
+    df2 = df.ix[:,["time","close","open","high","low","volume","fiveave","tenave","twenave"]]
 
     return df2
