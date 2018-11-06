@@ -102,19 +102,22 @@ def historyData(prm,count,nowDay):
 
         # 5日平均、10日平均、25日平均のリストを作成
         # 25日平均に合わせて要素を削除
-        Closelist = usdJpyDataList.get("close")
-        for i in range(5,len(Closelist)):
-            five = ListAverage(i,5,Closelist)
+        Closelist = []
+        for w in range(len(usdJpyDataList)):
+            Closelist.append(usdJpyDataList[w].get("closeBid"))
+
+        for x in range(5,len(Closelist)):
+            five = ListAverage(x,5,Closelist)
             fiveList.append(five)
         del fiveList[:20]
 
-        for j in range(10,len(Closelist)):
-            ten = ListAverage(j,10,len(Closelist))
+        for y in range(10,len(Closelist)):
+            ten = ListAverage(y,10,Closelist)
             tenList.append(ten)
         del tenList[:15]
 
-        for k in range(25,len(Closelist)):
-            twen = ListAverage(k,25,len(Closelist))
+        for z in range(25,len(Closelist)):
+            twen = ListAverage(z,25,Closelist)
             twenList.append(twen)
 
         # list1(USD_JPY_D1)をdict型にデータを抜き出し加工する

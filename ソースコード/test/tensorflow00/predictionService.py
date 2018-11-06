@@ -36,18 +36,18 @@ check = check.reset_index()
 last = len(check) - 1
 # 最新データは最後尾にあるのに注意
 if (check.iloc[last,0] != time):
-
+    # USD_JPY_RATEからcloseの中身だけを抽出したあと、新しいcloseを追加（list形式）
     newCloseDataList = check["close"].tolist
-    newCloseDataList = newCloseDataList.append(USD_JPY_D1[0].get("close"))
+    newCloseDataList = newCloseDataList.append(USD_JPY_D1[0].get("closeBid"))
 
     # 単純移動平均を作る関数
     fiveAve = []
     tenAve = []
     twenAve = []
 
-    five = ListAverage(last+1,5,newCloseDataList["close"])
-    ten = ListAverage(last+1,10,newCloseDataList["close"])
-    twen = ListAverage(last+1,25,newCloseDataList["close"])
+    five = ListAverage(last+1,5,newCloseDataList)
+    ten = ListAverage(last+1,10,newCloseDataList)
+    twen = ListAverage(last+1,25,newCloseDataList)
 
     fiveAve.append(five)
     tenAve.append(ten)

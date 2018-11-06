@@ -34,7 +34,7 @@ def dfAverage(key,day,df):
 def ListAverage(key,day,list):
 
     # 要素番号（日付順）をday分遡って範囲を指定(close)
-    Ave = list[key - day : key].get("close")
+    Ave = list[key - day : key]
     # 平均を求める
     result = np.mean(Ave)
 
