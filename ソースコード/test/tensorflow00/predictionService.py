@@ -36,6 +36,8 @@ last = len(check) - 1
 # 最新データは最後尾にあるのに注意
 if (check.iloc[last,0] != time):
 
+
+
     result1 = ListWriteForMongo(USD_JPY_D1)
 
     # # 登録するための辞書作成

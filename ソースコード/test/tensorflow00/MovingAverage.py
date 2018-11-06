@@ -20,76 +20,25 @@ c = sys.modules["const"]
 # key: 要素番号（ループ処理で利用）
 # day: 何日平均で取りたいかを入力
 # df: ソートして整頓されたデータフレームを引数に入れること
-def Average(key,day,df):
+def dfAverage(key,day,df):
 
     # 要素番号（日付順）をday分遡って範囲を指定する
-    Ave = df[key - day:key]
+    Ave = df[key - day : key]
     # closeの部分を取り出す
     Ave = Ave.close
-
+    # 平均を求める
     result = Ave.mean()
 
     return result
 
+def ListAverage(key,day,list):
 
-
-# ２５日移動平均を求める関数
-def twentyfiveAverage(key,df):
-    # keyには要素日付呼び出し
-    # twentyfiveaverage = mongodb_read()
-    # twentyfiveaverage = twentyfiveaverage.sort_values(by="time")
-    # twentyfiveaverage = twentyfiveaverage.reset_index()
-
-    # 引数の日付から25日遡って25日分範囲指定
-    twentyfiveaverage = df[key - 25:key]
-    # closeの部分を取り出す
-    twentyfiveaverage = twentyfiveaverage.close
-
-    # 終値の平均を算出する処理
-    result = twentyfiveaverage.mean()
+    # 要素番号（日付順）をday分遡って範囲を指定(close)
+    Ave = list[key - day : key].get("close")
+    # 平均を求める
+    result = np.mean(Ave)
 
     return result
-
-
-# １０日移動平均を求める関数
-def tenAverage(key,df):
-    # keyには要素日付を呼び出し
-
-    # １０日分の終値をUSD_JPY_RATEから取り出す処理
-    # 読み込みと時刻昇順に並べ替え
-    # tenaverage = mongodb_read()
-    # tenaverage = tenaverage.sort_values(by="time")
-    # tenaverage = tenaverage.reset_index()
-
-    # 引数の日付から10日遡って10日分の範囲指定
-    tenaverage = df[key - 10 : key]
-    # closeの部分を取り出す
-    tenaverage = tenaverage.close
-
-    # 終値の平均を算出する処理(数字部分だけ)
-    result = tenaverage.mean()
-
-    return result
-
-# ５日移動平均を求める関数
-def fiveAverage(key,df):
-    # dayには要素日付を入力
-    # 引数の日付から、行を特定するための数
-
-    # # ５日分の終値をUSD_JPY_RATEから取り出す処理
-    # fiveaverage = mongodb_read()
-    # fiveaverage = fiveaverage.sort_values(by="time")
-    # fiveaverage = fiveaverage.reset_index()
-
-    # 日付timeに対してその日から５日遡った値～timeまでの範囲を取得
-    fiveaverage = df[key - 5 : key]
-    fiveaverage = fiveaverage.close
-
-    # 終値の平均を算出する処理
-    result = fiveaverage.mean()
-
-    return result
-
 
 
 def MakeMovingAverage():
@@ -108,7 +57,7 @@ def MakeMovingAverage():
     # time毎に5日平均を回す！（前から５番目まで飛ぶ）
     for i in range(5,len(df)):
 
-        Five = fiveAverage(i,df)
+        Five = dfAverage(i,5,df)
 
         # Five出力結果のリストの作成
         fivelist.append(Five)
@@ -120,7 +69,7 @@ def MakeMovingAverage():
     # time毎に10日平均を回す！（前から１０番目まで飛ぶ）
     for j in range(10,len(df)):
 
-        Ten = tenAverage(j,df)
+        Ten = dfAverage(j,10,df)
 
         # Ten出力結果のリストの作成
         tenlist.append(Ten)
@@ -132,7 +81,7 @@ def MakeMovingAverage():
     # time毎に25日平均を回す(前から２５番目まで飛ぶ)
     for k in range(25,len(df)):
 
-        Twen = twentyfiveAverage(k,df)
+        Twen = dfAverage(k,25,df)
 
         # Twen出力結果リストの作成
         twenlist.append(Twen)
