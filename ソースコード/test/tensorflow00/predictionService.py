@@ -77,14 +77,14 @@ P_TWENAVE = makePredictionModel(c.TWENAVE)
 #　時間を取得→実行時間の設定に使うかも？
 P_TIME = GetDate()
 
-# 予測値だけを取り出す処理
-P_OPEN = P_OPEN[:,0].astype(np.float32)
-P_CLOSE = P_CLOSE[:,0].astype(np.float32)
-P_HIGH = P_HIGH[:,0].astype(np.float32)
-P_LOW = P_LOW[:,0].astype(np.float32)
-P_FIVEAVE = P_FIVEAVE[:0].astype(np.float32)
-P_TENAVE = P_TENAVE[:0].astype(np.float32)
-P_TWENAVE = P_TWENAVE[:0].astype(np.float32)
+# 予測値だけを取り出す処理.astype(np.float64)
+P_OPEN = P_OPEN[:,0]
+P_CLOSE = P_CLOSE[:,0]
+P_HIGH = P_HIGH[:,0]
+P_LOW = P_LOW[:,0]
+P_FIVEAVE = P_FIVEAVE[:,0]
+P_TENAVE = P_TENAVE[:,0]
+P_TWENAVE = P_TWENAVE[:,0]
 
 if (check.iloc[last,0] != time):
     # 辞書キーの作成
