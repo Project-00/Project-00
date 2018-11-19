@@ -62,7 +62,7 @@ def Order(Price,Units,Side):
 
     return order
 
-# 指値注文：売り専　priceには予測した売りたい値段を入れるの推奨
+# 指値注文
 # LimitTimeには有効期限を入力すること
 # Priceには値段を入れる
 # Unitsには通貨量をいれる
@@ -78,7 +78,7 @@ def LimitOrder(LimitTime,Price,Units,Side):
                                      )
     return limit_order
 
-# 逆指値注文：売り専２　priceには予測した売りたい値段を入れるの推奨
+# 逆指値注文
 # LimitTimeには有効期限を入力すること
 # Priceには値段を入れる
 # Unitsには通貨量をいれる
@@ -94,7 +94,7 @@ def StopOrder(LimitTime,Price,Units,Side):
                                     )
     return stop_order
 
-# 成功注文(OCO注文)（利益確定と損切りの指定）：買い注文の予定
+# 成功注文(OCO注文)（利益確定と損切りの指定）
 # High: 利益確定レート
 # Low: 損切りレート
 # Unitsには通貨量をいれる
