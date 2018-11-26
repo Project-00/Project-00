@@ -93,7 +93,7 @@ P_FIFTAVE = P_FIFTAVE[:,0]
 if (check.iloc[last,0] != time):
     # 辞書キーの作成
     p = {"time": P_TIME, "close": P_CLOSE[0], "open": P_OPEN[0], "high": P_HIGH[0], "low": P_LOW[0],"fiveave": P_FIVEAVE[0],
-         "tenave": P_TENAVE[0],"twenave": P_TWENAVE[0]
+         "tenave": P_TENAVE[0],"twenave": P_FIFTAVE[0]
          }
 
     result1 = insertCollection(c.PREDICTION_COL, p)

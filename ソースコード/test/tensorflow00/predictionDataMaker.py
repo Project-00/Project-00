@@ -43,7 +43,7 @@ def predictionDataMaker(parameter):
     if parameter == c.TENAVE:
         df = df.ix[:, ["time", "tenave", "close", "open", "high", "volume","low","fiveave","fiftave"]]
         prm = ["tenave"]
-    if parameter == c.TWENAVE:
+    if parameter == c.FIFTAVE:
         df = df.ix[:, ["time", "fiftave", "close", "open", "high", "volume","low","fiveave","tenave"]]
         prm = ["fiftave"]
 
