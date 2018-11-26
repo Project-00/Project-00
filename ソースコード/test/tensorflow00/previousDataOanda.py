@@ -35,8 +35,8 @@ def oneListWriteForMongo(list1,five,ten,fift):
 def ListWriteForMongo(list1,list2,list3,list4):
     # 移動平均用のループカウンタ
     k = 0
-    # 25番目からスタートして最後まで（25日平均に合わせる）
-    for j in range(25,len(list1)):
+    # 15番目からスタートして最後まで（15日平均に合わせる）
+    for j in range(15,len(list1)):
 
         d = {"time": list1[j].get('time')[:10].replace('-','/'), "close": list1[j].get('closeBid'), 'open': list1[j].get('openBid'),
              'high': list1[j].get('highBid'), 'low': list1[j].get('lowBid'),
