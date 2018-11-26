@@ -26,26 +26,26 @@ def predictionDataMaker(parameter):
 
     # parameter毎に順序切り替え
     if parameter == c.CLOSE:
-        df = df.ix[:, ["time", "close", "open", "high", "low", "volume","fiveave","tenave","twenave"]]
+        df = df.ix[:, ["time", "close", "open", "high", "low", "volume","fiveave","tenave","fiftave"]]
         prm = ["close"]
     if parameter == c.OPEN:
-        df = df.ix[:, ["time", "open", "close", "high", "low", "volume","fiveave","tenave","twenave"]]
+        df = df.ix[:, ["time", "open", "close", "high", "low", "volume","fiveave","tenave","fiftave"]]
         prm = ["open"]
     if parameter == c.HIGH:
-        df = df.ix[:, ["time", "high", "close", "open", "low", "volume","fiveave","tenave","twenave"]]
+        df = df.ix[:, ["time", "high", "close", "open", "low", "volume","fiveave","tenave","fiftave"]]
         prm = ["high"]
     if parameter == c.LOW:
-        df = df.ix[:, ["time", "low", "close", "open", "high", "volume","fiveave","tenave","twenave"]]
+        df = df.ix[:, ["time", "low", "close", "open", "high", "volume","fiveave","tenave","fiftave"]]
         prm = ["low"]
     if parameter == c.FIVEAVE:
-        df = df.ix[:, ["time", "fiveave", "close", "open", "high", "volume","low","tenave","twenave"]]
+        df = df.ix[:, ["time", "fiveave", "close", "open", "high", "volume","low","tenave","fiftave"]]
         prm = ["fiveave"]
     if parameter == c.TENAVE:
-        df = df.ix[:, ["time", "tenave", "close", "open", "high", "volume","low","fiveave","twenave"]]
+        df = df.ix[:, ["time", "tenave", "close", "open", "high", "volume","low","fiveave","fiftave"]]
         prm = ["tenave"]
     if parameter == c.TWENAVE:
-        df = df.ix[:, ["time", "twenave", "close", "open", "high", "volume","low","fiveave","tenave"]]
-        prm = ["twenave"]
+        df = df.ix[:, ["time", "fiftave", "close", "open", "high", "volume","low","fiveave","tenave"]]
+        prm = ["fiftave"]
 
     print(parameter + "を計算します")
         

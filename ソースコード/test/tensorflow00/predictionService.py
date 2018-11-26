@@ -47,17 +47,17 @@ if (check["time"][last] != time):
     # 単純移動平均を作る関数(空のリスト宣言)
     fiveAve = []
     tenAve = []
-    twenAve = []
+    fiftAve = []
 
     five = ListAverage(last+1,5,newCloseDataList)
     ten = ListAverage(last+1,10,newCloseDataList)
-    twen = ListAverage(last+1,25,newCloseDataList)
+    fift = ListAverage(last+1,15,newCloseDataList)
 
     fiveAve.append(five)
     tenAve.append(ten)
-    twenAve.append(twen)
+    fiftAve.append(fift)
 
-    result1 = oneListWriteForMongo(USD_JPY_D1,fiveAve,tenAve,twenAve)
+    result1 = oneListWriteForMongo(USD_JPY_D1,fiveAve,tenAve,fiftAve)
 
     # # 登録するための辞書作成
     # d = {"time": time, "close": USD_JPY_D1[0].get('closeBid'), 'open': USD_JPY_D1[0].get('openBid'),
@@ -76,7 +76,7 @@ P_HIGH = makePredictionModel(c.HIGH)
 P_LOW = makePredictionModel(c.LOW)
 P_FIVEAVE = makePredictionModel(c.FIVEAVE)
 P_TENAVE = makePredictionModel(c.TENAVE)
-P_TWENAVE = makePredictionModel(c.TWENAVE)
+P_FIFTAVE = makePredictionModel(c.FIFTAVE)
 
 #　時間を取得→実行時間の設定に使うかも？
 P_TIME = GetDate()
@@ -88,7 +88,7 @@ P_HIGH = P_HIGH[:,0]
 P_LOW = P_LOW[:,0]
 P_FIVEAVE = P_FIVEAVE[:,0]
 P_TENAVE = P_TENAVE[:,0]
-P_TWENAVE = P_TWENAVE[:,0]
+P_FIFTAVE = P_FIFTAVE[:,0]
 
 if (check.iloc[last,0] != time):
     # 辞書キーの作成
