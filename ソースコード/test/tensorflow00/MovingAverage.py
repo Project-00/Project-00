@@ -52,7 +52,8 @@ def MakeMovingAverage():
     # 格納リスト作成
     fivelist = []
     tenlist = []
-    twenlist = []
+    fiftlist = []
+    # twenlist = []
 
     # time毎に5日平均を回す！（前から５番目まで飛ぶ）
     for i in range(5,len(df)):
@@ -77,24 +78,30 @@ def MakeMovingAverage():
     # 25日移動平均の要素数に合わせてデータを削除(15行分)
     del tenlist[:15]
 
+    for k in range(15,len(df)):
 
-    # time毎に25日平均を回す(前から２５番目まで飛ぶ)
-    for k in range(25,len(df)):
+        Fift = dfAverage(k,15,df)
 
-        Twen = dfAverage(k,25,df)
+        fiftlist.append(Fift)
 
-        # Twen出力結果リストの作成
-        twenlist.append(Twen)
 
-    # 25日分のデータフレームを除去、timeだけ残す
+    # # time毎に25日平均を回す(前から２５番目まで飛ぶ)
+    # for k in range(25,len(df)):
+    #
+    #     Twen = dfAverage(k,25,df)
+    #
+    #     # Twen出力結果リストの作成
+    #     twenlist.append(Twen)
+
+    # 15日分のデータフレームを除去、timeだけ残す
     df = df.time
     dflist = df.tolist()
-    del dflist[:25]
+    del dflist[:15]
 
     # ２５日平均に数を合わせたので、辞書登録まわし
-    for x in range(len(twenlist)):
+    for x in range(len(fiftlist)):
 
-        d = {"time":dflist[x] ,"fiveave":fivelist[x],"tenave":tenlist[x],"twenave":twenlist[x]}
+        d = {"time":dflist[x] ,"fiveave":fivelist[x],"tenave":tenlist[x],"fiftave":fiftlist[x]}
 
         result = insertCollection(c.MOVINGAVERAGE_COL, d)
 
@@ -103,13 +110,3 @@ def MakeMovingAverage():
 #     collection = mongodb_write.getDBCollection(c.MOVINGAVERAGE_COL)
 #     collection.remove()
 #     result = MakeMovingAverage()
-
-    # if文で3日前が5日>10日の時、5日<10日の時
-    # if文で2日前が5>10,5<10の時
-    # if文で1日前が5>10,5<10の時
-    # 指定日の１０日平均と５日平均の差を見る
-
-
-    # １０日平均と５日平均がどちらが上にきているか
-    #     ５日平均が１０日平均より上にある場合
-    #       さらに価格が５日平均よりうえなら

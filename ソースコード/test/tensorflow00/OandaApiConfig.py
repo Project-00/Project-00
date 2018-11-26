@@ -49,7 +49,7 @@ def HistricalTrade(count):
 
 # -------------注文する関数群----------------
 
-# ストリーミング成行注文:基本使わない
+# ストリーミング成行注文
 # unitsは通貨量（ドル指定なら1000ドル,円指定なら1000円）統一化する量:　数字
 # sideは買い側か売り側か等を入力(売り:sell,買い:buy)
 def Order(Price,Units,Side):
@@ -94,7 +94,7 @@ def StopOrder(LimitTime,Price,Units,Side):
                                     )
     return stop_order
 
-# 成功注文(OCO注文)（利益確定と損切りの指定）
+# 成行注文(OCO注文)（利益確定と損切りの指定）
 # High: 利益確定レート
 # Low: 損切りレート
 # Unitsには通貨量をいれる
