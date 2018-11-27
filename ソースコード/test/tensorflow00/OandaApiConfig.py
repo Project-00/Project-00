@@ -51,7 +51,7 @@ def HistricalTrade(count):
 
 # ストリーミング成行注文
 # unitsは通貨量（ドル指定なら1000ドル,円指定なら1000円）統一化する量:　数字
-# sideは買い側か売り側か等を入力(売り:sell,買い:buy)
+# sideは買い側か売り側か等を入力(売り:"sell",買い:"buy")
 def Order(Price,Units,Side):
     order = oanda.create_order(account_id= account_id,
                                instrument = "USD_JPY",
@@ -66,7 +66,7 @@ def Order(Price,Units,Side):
 # LimitTimeには有効期限を入力すること
 # Priceには値段を入れる
 # Unitsには通貨量をいれる
-# Sideには買い側か売り側か入力(売り:sell,買い:buy)
+# Sideには買い側か売り側か入力(売り:"sell",買い:"buy")
 def LimitOrder(LimitTime,Price,Units,Side):
     limit_order = oanda.create_order(account_id= account_id,
                                      instrument = "USD_JPY",
@@ -82,7 +82,7 @@ def LimitOrder(LimitTime,Price,Units,Side):
 # LimitTimeには有効期限を入力すること
 # Priceには値段を入れる
 # Unitsには通貨量をいれる
-# Sideには買い側か売り側か入力(売り:sell,買い:buy)
+# Sideには買い側か売り側か入力(売り:"sell",買い:"buy")
 def StopOrder(LimitTime,Price,Units,Side):
     stop_order = oanda.create_order(account_id= account_id,
                                     instrument = "USD_JPY",
@@ -98,7 +98,7 @@ def StopOrder(LimitTime,Price,Units,Side):
 # High: 利益確定レート
 # Low: 損切りレート
 # Unitsには通貨量をいれる
-# Sideには買い側か売り側か入力(売り:sell,買い:buy)
+# Sideには買い側か売り側か入力(売り:"sell",買い:"buy")
 def MKOrder(High,Low,Units,Side):
     order_mk = oanda.create_order(account_id= account_id,
                                   instrument="USD_JPY",

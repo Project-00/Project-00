@@ -116,7 +116,7 @@ def historyData(prm,count,nowDay):
             tenList.append(ten)
         del tenList[:5]
 
-        for z in range(25,len(Closelist)):
+        for z in range(15,len(Closelist)):
             fift = ListAverage(z,15,Closelist)
             fiftList.append(fift)
 
