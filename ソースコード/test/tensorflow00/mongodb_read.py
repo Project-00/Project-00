@@ -5,10 +5,9 @@ import sys
 import pandas as pd
 from mongodb_write import getDBCollection
 
-# DB(collection)の名前
-colName = 'USD_JPY_RATE'
 
-def ReaDB(collectionName):
+
+def ReaDB(colName):
 
     # DBの読み込み先を取得する
     collection = getDBCollection(colName)
@@ -19,7 +18,7 @@ def ReaDB(collectionName):
 
     return df
 
-def mongodb_read():
+def mongodb_read(colName):
 
     df = ReaDB(colName)
 

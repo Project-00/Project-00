@@ -30,7 +30,7 @@ time = USD_JPY_D1[0].get("time")[0:10].replace('-', '/')
 # weekday = datetime.strptime(time.replace('/', '-') + " 06:00:00", '%Y-%m-%d %H:%M:%S').weekday()
 
 # 登録の重複を防ぐための措置
-check = mongodb_read()
+check = mongodb_read(c.STUDY_COL)
 check = check.sort_values(by="time")
 check = check.reset_index()
 last = len(check) - 1
@@ -93,7 +93,7 @@ P_FIFTAVE = P_FIFTAVE[:,0]
 if (check.iloc[last,0] != time):
     # 辞書キーの作成
     p = {"time": P_TIME, "close": P_CLOSE[0], "open": P_OPEN[0], "high": P_HIGH[0], "low": P_LOW[0],"fiveave": P_FIVEAVE[0],
-         "tenave": P_TENAVE[0],"twenave": P_FIFTAVE[0]
+         "tenave": P_TENAVE[0],"fiftave": P_FIFTAVE[0]
          }
 
     result1 = insertCollection(c.PREDICTION_COL, p)

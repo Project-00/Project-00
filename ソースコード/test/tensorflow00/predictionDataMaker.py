@@ -19,7 +19,7 @@ def predictionDataMaker(parameter):
     # 定数呼び出し
     c=sys.modules["const"]
 
-    df = mongodb_read()
+    df = mongodb_read(c.STUDY_COL)
     df = df.sort_values(by="time")
     df = df.reset_index()
 
@@ -120,4 +120,4 @@ def predictionDataMaker(parameter):
 #     print(n_stocks)
 
 # if __name__ == "__main__":
-#     p = predictionDataMaker("OPEN")
+#     p = predictionDataMaker("OPEN")ss

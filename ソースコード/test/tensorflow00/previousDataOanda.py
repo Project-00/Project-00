@@ -25,7 +25,7 @@ def oneListWriteForMongo(list1,five,ten,fift):
          'volume': list1[0].get('volume'), 'fiveave': five[0], 'tenave': ten[0], 'fiftave': fift[0]}
 
     # USD_JPY_RATEに格納
-    result = insertCollection("USD_JPY_RATE", d)
+    result = insertCollection(c.STUDY_COL, d)
 
     return result
 
@@ -44,7 +44,7 @@ def ListWriteForMongo(list1,list2,list3,list4):
         # 移動平均用のループ更新
         k+=1
         # USD_JPY_RATEに格納
-        result = insertCollection("USD_JPY_RATE", d)
+        result = insertCollection(c.STUDY_COL, d)
 
     return result
 
@@ -142,7 +142,7 @@ def historyData(prm,count,nowDay):
             d = ListWriteForMongo(USD_JPY_D1)
 
             # USD_JPY_RATEに格納
-            result = insertCollection("USD_JPY_RATE", d)
+            result = insertCollection(c.STUDY_COL, d)
 
             # 先頭のデータのtimeを取得して、RFC3339フォーマットをpythonのdatetimeフォーマットに変換
             dtime = dt.strptime(USD_JPY_D1[0]['time'], '%Y-%m-%dT%H:%M:%S.%fZ')
@@ -162,7 +162,7 @@ def historyData(prm,count,nowDay):
         d = ListWriteForMongo(USD_JPY_D1)
 
         # USD_JPY_RATEに格納
-        result = insertCollection("USD_JPY_RATE", d)
+        result = insertCollection(c.STUDY_COL, d)
 
 
 #
