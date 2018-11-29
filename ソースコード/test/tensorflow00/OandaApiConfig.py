@@ -121,3 +121,8 @@ def ChangeOrder(Order_id,Price,Units):
                                      units=Units)
 
     return changeorder
+
+if __name__ == "__main__":
+
+    test = OpenOrder()
+    print(test)

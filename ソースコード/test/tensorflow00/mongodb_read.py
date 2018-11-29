@@ -4,6 +4,7 @@ import os
 import sys
 import pandas as pd
 from mongodb_write import getDBCollection
+import pprint
 
 
 
@@ -25,5 +26,13 @@ def mongodb_read(colName):
     del df["_id"]
 
     df2 = df.ix[:,["time","close","open","high","low","volume","fiveave","tenave","fiftave"]]
+
+    return df2
+
+def mongod_read_find_one(colName,calm):
+
+    collection = getDBCollection(colName)
+
+    df2 = collection.find_one(calm)
 
     return df2
