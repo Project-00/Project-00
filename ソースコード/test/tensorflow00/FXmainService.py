@@ -115,6 +115,8 @@ if __name__ == "__main__":
         schedule.run_pending()
         # 現在のレートを格納
         Now_Rate = OandaTimeRate()
+        print("１分足の値")
+        print(Now_Rate)
         # 売買関数
 
         time.sleep(60)
