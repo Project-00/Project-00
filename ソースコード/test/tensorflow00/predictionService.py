@@ -98,5 +98,5 @@ def predictionService():
 
         print("データベースの更新処理完了")
 
-if __name__ == "__main__":
-    predictionService()
+# if __name__ == "__main__":
+#     predictionService()

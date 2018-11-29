@@ -27,6 +27,6 @@ def OandaTimeRate():
     # collection.insert(formatToInsert("bid",prices[0].get("bid")))
     # collection.insert(formatToInsert("ask",prices[0].get("ask")))
 
-if __name__ == "__main__":
-    Now = OandaTimeRate()
-    print(Now)
+# if __name__ == "__main__":
+#     Now = OandaTimeRate()
+#     print(Now)
