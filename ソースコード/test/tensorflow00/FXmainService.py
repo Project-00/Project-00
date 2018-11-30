@@ -64,7 +64,8 @@ if __name__ == "__main__":
     # 30分ごとにする処理
     schedule.every(30).minutes.do(UpdateJob)
     # １分ごとにする処理
-    while (True):
+    Operation = True
+    while (Operation == True):
         # スケジューラー発動
         schedule.run_pending()
         # 日付をdatatime形式で取得する処理
@@ -108,6 +109,6 @@ if __name__ == "__main__":
             time.sleep(60)
 
         else:
-            time.sleep(86400)
-            continue
+            Operation = False
+
 
