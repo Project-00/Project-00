@@ -1,12 +1,13 @@
 import oandapy
 import time
-import pymongo
-from pymongo import MongoClient
-from mongodb_write import getDBCollection
-from mongodb_write import formatToInsert
-from mongodb_write import insertCollection
+import configparser
+config = configparser.ConfigParser()
+config.read("config.ini")
+config.sections()
 
-oanda = oandapy.API(environment="practice", access_token="806baeb6718f153657980002fea49c6c-2cf6534cb404c014c63931f73fa3def7")
+api_key = config["OANDA"]["api_key"]
+
+oanda = oandapy.API(environment="practice", access_token= api_key)
 
 def OandaTimeRate():
     time.sleep(1)

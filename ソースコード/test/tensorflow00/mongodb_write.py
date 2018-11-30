@@ -1,5 +1,14 @@
 from pymongo import MongoClient
 import sys
+import configparser
+config = configparser.ConfigParser()
+config.read("config.ini")
+config.sections()
+
+IP_ADDRESS = config["DB"]["IP_ADDRESS"]
+PORT = int(config["DB"]["PORT"])
+ID = config["DB"]["ID"]
+PASS = config["DB"]["PASS"]
 
 
 #DBの書き込み先を取得する
@@ -9,8 +18,8 @@ def getDBCollection(collectionName):
     # LocalhostのMongoDBに書き込みます
 
 
-    client = MongoClient(c.IP_ADDRESS,c.PORT)
-    client.admin.authenticate(c.ID, c.PASS)
+    client = MongoClient(IP_ADDRESS,PORT)
+    client.admin.authenticate(ID, PASS)
     db = client.AUTO_TRADE_DB
 
     #コレクションの作成

@@ -12,11 +12,16 @@ from mongodb_write import insertCollection
 from mongodb_read import mongodb_read
 from previousDataOanda import historyData , oneListWriteForMongo
 from MovingAverage import ListAverage
+import configparser
+config = configparser.ConfigParser()
+config.read("config.ini")
+config.sections()
 
 # 下の層はオアンダの履歴を遡ってデータを取得し、データを加工、USD_JPY_RATEというテーブルの中へ格納する
 import oandapy
 
-oanda = oandapy.API(environment="practice", access_token="806baeb6718f153657980002fea49c6c-2cf6534cb404c014c63931f73fa3def7")
+api_key = config["OANDA"]["api_key"]
+oanda = oandapy.API(environment="practice", access_token= api_key)
 
 
 # 定数型の文字列を呼び出す(OPEN,CLOSE,HIGH,LOW)が入ってる　例：c.OPEN

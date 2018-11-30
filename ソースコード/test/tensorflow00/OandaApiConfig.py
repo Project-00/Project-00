@@ -2,15 +2,15 @@
 
 import oandapy
 import pandas as pd
-import datetime
-from datetime import datetime,timedelta
-import pytz
-import sys
+import configparser
+config = configparser.ConfigParser()
+config.read("config.ini")
+config.sections()
 
 # チュートリアル講座のアカウント情報
 
-account_id = "2412596"
-api_key = "806baeb6718f153657980002fea49c6c-2cf6534cb404c014c63931f73fa3def7"
+account_id = int(config["OANDA"]["account_id"])
+api_key = config["OANDA"]["api_key"]
 
 oanda = oandapy.API(environment="practice", access_token=api_key)
 

@@ -20,10 +20,6 @@ class _const(object):
     STUDY_COL = "USD_JPY_RATE"
     PREDICTION_COL = "P_USD_JPY_RATE"
     MOVINGAVERAGE_COL = "M_USD_JPY_RATE"
-    IP_ADDRESS = "54.69.191.130"
-    PORT = 27017
-    ID = "autoTrade"
-    PASS = "auto1103"
 
     # 4本値定数
     OPEN = "OPEN"
