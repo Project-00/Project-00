@@ -44,12 +44,18 @@ def UpdateJob():
     #  'accountCurrency': 'JPY'}    アカウントの国籍
     AccountData = ResponsAccountDetail()
 
-    print("未決済のトレード情報：\n" + OpenTrade)
-    print("トレード情報：\n" + TradeData)
-    print("トレードの履歴：\n" + TradeLog)
-    print("口座の残高：" + AccountData["balance"])
-    print("実現損益：" + AccountData["realizedPl"])
-    print("評価損益：" + AccountData["unrealizedPl"])
+    print("未決済のトレード情報：")
+    print(OpenTrade)
+    print("トレード情報：")
+    print(TradeData)
+    print("トレードの履歴：")
+    print(TradeLog)
+    print("口座の残高：")
+    print(AccountData["balance"])
+    print("実現損益：")
+    print(AccountData["realizedPl"])
+    print("評価損益：")
+    print(AccountData["unrealizedPl"])
 
 if __name__ == "__main__":
 
