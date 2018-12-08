@@ -15,7 +15,7 @@ def makePredictionModel(parameter):
     Y_train = pdm[2]
     Y_test = pdm[3]
     scaler = pdm[4]
-    n_stocks = pdm[5]
+    n_stocks = pdm[5]   # 要素数
 
     # -- tensorflowのニューラルネットワーク構築 --
 

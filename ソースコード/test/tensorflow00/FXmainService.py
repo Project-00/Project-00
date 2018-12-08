@@ -70,7 +70,7 @@ if __name__ == "__main__":
         if (hour <= 5):
             Operation = False
             # 15分置きにチェックさせる
-            time.sleep(900)
+            time.sleep(60)
         else:
             Operation = True
 

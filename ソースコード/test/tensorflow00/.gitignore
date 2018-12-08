@@ -1,2 +1,3 @@
 # Config.iniファイルを除外
 Config.ini
+LSTMTensor.py
