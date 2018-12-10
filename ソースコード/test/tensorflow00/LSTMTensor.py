@@ -11,19 +11,29 @@ from keras.layers import Activation, Dense
 from keras.layers import LSTM
 from keras.layers import Dropout
 from sklearn.preprocessing import MinMaxScaler
+from keras.layers.advanced_activations import PReLU
 from mongodb_read import mongodb_read
 
 # 定数呼び出し
 c = sys.modules["const"]
 
 # LSTMのモデルを設定
-def build_model(inputs, output_size, n_hidden, activ_func="relu",
-                 loss="mae", optimizer="adam"):
+def build_LSTMmodel(inputs, output_size, loss="mae", optimizer="adam"):
+    n_in = inputs.shape[0]  # len(Data)データの数
+    n_out = 1               # len(Y[0])
+    n_hidden = 300          # 隠れ層の数
+    unit = 400              # 出力系列数
+    Input_length = 0       # 入力系列数
+    dropout = 0.50          # ドロップアウト
+    learning_rate = 0.001   # 学習率
+    earlyStopping = 10      # Val_lossの値が改善しなくなった時の学習打ち切り閾値
+
     model = Sequential()
 
-    model.add(LSTM(n_hidden, input_shape=(inputs.shape[1], inputs.shape[2])))
-    model.add(Dropout(0.50))
-    model.add(Dense(units=output_size,activation=activ_func))
+    model.add(LSTM(n_hidden, input_shape=(inputs.shape[0], inputs.shape[1])))
+    model.add(PReLU())
+    model.add(Dropout(dropout))
+    model.add(Dense(units=unit,activation="relu"))
     model.add(Dense(units=5,activation="linear"))
 
     model.compile(loss=loss, optimizer=optimizer,metrics=["accuracy"])
@@ -68,7 +78,7 @@ def predictionDataMaker(parameter):
 
     print(parameter + "を計算します")
 
-    df_test = df.tail(1)
+    # df_test = df.tail(1)
 
     # 一番左の列を１日分移動上に(prmの位置はデータによるので要注意)
     df_shift = df.copy()
@@ -83,7 +93,7 @@ def predictionDataMaker(parameter):
     df_2 = df_2.drop(lastnum)  # データの最後尾を削除する
     # time(時間)を消去
     del df_2["time"]
-    del df_test["time"]
+    # del df_test["time"]
 
     # データセットの行数と列を格納
     n = df_2.shape[0]  # 行
@@ -91,13 +101,13 @@ def predictionDataMaker(parameter):
 
     # 訓練データとテストデータへ切り分け
     train_start = 0
-    train_end = int(np.floor(n))  # 前から数えて行全体の８割を教師データとして扱う
-    # test_start = train_end   # 教師データ以降のデータをテストデータとして扱う
-    # test_end = n
+    train_end = int(np.floor(n * 0.8))  # 前から数えて行全体の８割を教師データとして扱う
+    test_start = train_end   # 教師データ以降のデータをテストデータとして扱う
+    test_end = n
     data_train = df_2[train_start:train_end]  # トレーニングの幅の設定
-    # data_test = df_2[test_start:test_end]  # テストの幅の設定
+    data_test = df_2[test_start:test_end]  # テストの幅の設定
     # data_train = df_2
-    data_test = df_test  # テストの幅の設定
+    # data_test = df_test  # テストの幅の設定
 
     # データの正規化
     scaler = MinMaxScaler(feature_range=(-1, 1))  # -1から1の範囲に正規化する設定
@@ -111,7 +121,7 @@ def predictionDataMaker(parameter):
     X_train = data_train_norm[:, 1:]  # 説明関数（出力を求める素材）    列   0   1    2    3   4
     X_test = data_test_norm[:, 1:]  # closeを除く他の要素を選択している(close,open,high,low,volume)
     Y_train = data_train_norm[:, 0]  # 目的関数（出力を予想する）
-    Y_test = data_test_norm[:, 0]  # closeだけを選択している
+    Y_test = data_test_norm[:, 0]  # DataFrame中の一番左だけを選択している
 
     # 訓練データの説明関数を取得
     n_stocks = X_train.shape[1]  # 説明関数の列数（close 等の要素の種類の数）
@@ -138,4 +148,4 @@ def makePredictionModel(parameter):
     hidden = 80             # 出力次元(75日移動平均を意識)
     epochs = 3000           # 反復数（エポック数）
     batch_size = 25         # バッチ処理数（仮として１か月分のデータ数）
-    learning_rate = 0.001   # 学習率
+
