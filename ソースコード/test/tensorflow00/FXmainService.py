@@ -60,9 +60,9 @@ def UpdateJob():
 if __name__ == "__main__":
 
     # 一日に一回決まった時間に処理を開始する処理
-    D = schedule.every().day.at("5:00").do(daily)
+    schedule.every().day.at("5:00").do(daily)
     # 30分ごとにする処理
-    U = schedule.every(30).minutes.do(UpdateJob)
+    schedule.every(30).minutes.do(UpdateJob)
 
     while(True):
         hour = GetHour()
@@ -77,7 +77,7 @@ if __name__ == "__main__":
         # １分ごとにする処理
         while (Operation == True):
             # スケジューラー発動
-            schedule.run_pending(U)
+            schedule.run_pending()
             # 日付をdatatime形式で取得する処理
             CheckTime = LateDate(1)
             # 営業日か判定する処理

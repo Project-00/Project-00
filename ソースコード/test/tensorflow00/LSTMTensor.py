@@ -30,10 +30,13 @@ def build_LSTMmodel(inputs, output_size, loss="mae", optimizer="adam"):
 
     model = Sequential()
 
-    model.add(LSTM(n_hidden, input_shape=(inputs.shape[0], inputs.shape[1])))
     model.add(PReLU())
+    model.add(LSTM(n_hidden, input_shape=(inputs.shape[0], inputs.shape[1]),activation=PReLU))
     model.add(Dropout(dropout))
-    model.add(Dense(units=unit,activation="relu"))
+    model.add(Dense(units=250,activation=PReLU))
+    model.add(Dropout(dropout))
+    model.add(Dense(unit=150,activation=PReLU))
+    model.add(Dropout(dropout))
     model.add(Dense(units=5,activation="linear"))
 
     model.compile(loss=loss, optimizer=optimizer,metrics=["accuracy"])
