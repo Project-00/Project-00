@@ -18,8 +18,8 @@ from mongodb_read import mongodb_read
 c = sys.modules["const"]
 
 # LSTMのモデルを設定
-def build_LSTMmodel(inputs, output_size, loss="mae", optimizer="adam"):
-    n_in = inputs.shape[0]  # len(Data)データの数
+def build_LSTMmodel(InputsData, output_size, loss="mean_squared_error", optimizer="adam"):
+    n_in = InputsData.shape[0]  # len(Data)データの数
     n_out = 1               # len(Y[0])
     n_hidden = 300          # 隠れ層の数
     unit = 400              # 出力系列数
@@ -31,13 +31,21 @@ def build_LSTMmodel(inputs, output_size, loss="mae", optimizer="adam"):
     model = Sequential()
 
     model.add(PReLU())
-    model.add(LSTM(n_hidden, input_shape=(inputs.shape[0], inputs.shape[1]),activation=PReLU))
+    model.add(LSTM(n_hidden,
+                   input_shape=(InputsData.shape[1], InputsData.shape[2]),
+                   batch_size=80,
+                   return_sequences=True,
+                   stateful=True))
     model.add(Dropout(dropout))
     model.add(Dense(units=250,activation=PReLU))
     model.add(Dropout(dropout))
     model.add(Dense(unit=150,activation=PReLU))
     model.add(Dropout(dropout))
-    model.add(Dense(units=5,activation="linear"))
+    model.add(Dense(units=75,activation=PReLU))
+    model.add(Dropout(dropout))
+    model.add(Dense(units=150,activation=PReLU))
+    model.add(Dropout(dropout))
+    model.add(Dense(units=400,activation=PReLU))
 
     model.compile(loss=loss, optimizer=optimizer,metrics=["accuracy"])
     return model

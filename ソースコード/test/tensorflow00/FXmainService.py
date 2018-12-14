@@ -19,7 +19,9 @@ c = sys.modules["const"]
 # 毎日更新する処理群
 def daily():
     # predictionServiceを更新する処理
+    print("データベースの更新を始める")
     predictionService()
+    print("更新の完了")
 
 def UpdateJob():
 
@@ -60,14 +62,14 @@ def UpdateJob():
 if __name__ == "__main__":
 
     # 一日に一回決まった時間に処理を開始する処理
-    schedule.every().day.at("5:00").do(daily)
+    schedule.every().day.at("7:00").do(daily)
     # 30分ごとにする処理
     schedule.every(30).minutes.do(UpdateJob)
 
     while(True):
         hour = GetHour()
         # 活動時間範囲を決める処理
-        if (hour <= 4):
+        if (hour <= 6):
             Operation = False
             # 1分置きにチェックさせる
             time.sleep(60)
@@ -117,9 +119,9 @@ if __name__ == "__main__":
                 # 売買関数
 
                 time.sleep(60)
-                # 終了時間判定(AM５時以下の時、0:00～4:59時の間になるとオペレーション終了)
+                # 終了時間判定(AM７時以下の時、0:00～6:59時の間になるとオペレーション終了)
                 endhour = GetHour()
-                if(endhour <= 5):
+                if(endhour <= 6):
                     Operation = False
 
             else:
