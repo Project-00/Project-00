@@ -75,6 +75,7 @@ if __name__ == "__main__":
             time.sleep(60)
         else:
             Operation = True
+            Do_Job = True
 
         # １分ごとにする処理
         while (Operation == True):
@@ -87,8 +88,8 @@ if __name__ == "__main__":
                 Time = CheckTime.strftime('%Y/%m/%d')
                 # predictionServceの更新反映処理
                 # P_USD_JPY_RATEの中から、値を指定して取得
-                P_USD_JPY = mongod_read_find_one(c.PREDICTION_COL, {"time": Time})
-                if(P_USD_JPY["time"] != Time):
+                if(Do_Job == True):
+                    P_USD_JPY = mongod_read_find_one(c.PREDICTION_COL, {"time": Time})
 
                     # USD_JPY_RATEを呼び出してDataFrame型で変数に格納,新しい日付が下に来るようにソート
                     USD_JPY = mongodb_read(c.STUDY_COL)
@@ -111,6 +112,7 @@ if __name__ == "__main__":
                         Close = SClose
                         # Unit = 100
 
+                    Do_Job = False
 
                 # 現在のレートを格納
                 Now_Rate = OandaTimeRate()
