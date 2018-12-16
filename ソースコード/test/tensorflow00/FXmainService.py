@@ -17,11 +17,12 @@ import const
 c = sys.modules["const"]
 
 # 毎日更新する処理群
-def daily():
+def Daily():
     # predictionServiceを更新する処理
     print("データベースの更新を始める")
     predictionService()
     print("更新の完了")
+    return
 
 def UpdateJob():
 
@@ -58,11 +59,12 @@ def UpdateJob():
     print(AccountData["realizedPl"])
     print("評価損益：")
     print(AccountData["unrealizedPl"])
+    return
 
 if __name__ == "__main__":
 
-    # 一日に一回決まった時間に処理を開始する処理
-    schedule.every().day.at("7:00").do(daily)
+    # # 一日に一回決まった時間に処理を開始する処理
+    # schedule.every().day.at("7:00").do(Daily)
     # 30分ごとにする処理
     schedule.every(30).minutes.do(UpdateJob)
 
@@ -89,6 +91,7 @@ if __name__ == "__main__":
                 # predictionServceの更新反映処理
                 # P_USD_JPY_RATEの中から、値を指定して取得
                 if(Do_Job == True):
+                    Daily()
                     P_USD_JPY = mongod_read_find_one(c.PREDICTION_COL, {"time": Time})
 
                     # USD_JPY_RATEを呼び出してDataFrame型で変数に格納,新しい日付が下に来るようにソート
