@@ -18,22 +18,19 @@ from mongodb_read import mongodb_read
 c = sys.modules["const"]
 
 # LSTMのモデルを設定
-def build_LSTMmodel(InputsData, output_size, loss="mean_squared_error", optimizer="adam"):
-    n_in = InputsData.shape[0]  # len(Data)データの数
-    n_out = 1               # len(Y[0])
-    n_hidden = 300          # 隠れ層の数
-    unit = 400              # 出力系列数
-    Input_length = 0       # 入力系列数
-    dropout = 0.50          # ドロップアウト
-    learning_rate = 0.001   # 学習率
-    earlyStopping = 10      # Val_lossの値が改善しなくなった時の学習打ち切り閾値
+def build_LSTMmodel(InputsData):
+    n_in_size = InputsData.shape[1]      # len(Data)データの数
+    n_out_size = 1                  # len(Y[0])
+    n_hidden = 400                  # 隠れ層の数
+    Input_length = 0                # 入力系列数
+    dropout = 0.50                  # ドロップアウト
+
 
     model = Sequential()
 
     model.add(PReLU())
     model.add(LSTM(n_hidden,
-                   input_shape=(InputsData.shape[1], InputsData.shape[2]),
-                   batch_size=80,
+                   batch_input_shape=(None, n_in_size, n_out_size),
                    return_sequences=True,
                    stateful=True))
     model.add(Dropout(dropout))
@@ -45,9 +42,11 @@ def build_LSTMmodel(InputsData, output_size, loss="mean_squared_error", optimize
     model.add(Dropout(dropout))
     model.add(Dense(units=150,activation=PReLU))
     model.add(Dropout(dropout))
-    model.add(Dense(units=400,activation=PReLU))
+    model.add(Dense(units=1,activation=PReLU))
 
-    model.compile(loss=loss, optimizer=optimizer,metrics=["accuracy"])
+    model.compile(loss="mean_squared_error",
+                  optimizer="adam",
+                  metrics=["accuracy"])
     return model
 
 
@@ -145,11 +144,11 @@ def makePredictionModel(parameter):
 
     pdm = predictionDataMaker(parameter)
 
-    X_train = pdm[0]
-    X_test = pdm[1]
-    Y_train = pdm[2]
-    Y_test = pdm[3]
-    scaler = pdm[4]
+    X_train = pdm[0]    # 説明教師データ群
+    X_test = pdm[1]     # 説明テストデータ群
+    Y_train = pdm[2]    # 目的教師データ群
+    Y_test = pdm[3]     # 目的テストデータ群
+    scaler = pdm[4]     # 値を戻す時に使う（スカラ倍）
     n_stocks = pdm[5]   # 要素数
 
     # セッション開始の奴
@@ -158,5 +157,22 @@ def makePredictionModel(parameter):
     # 設定
     hidden = 80             # 出力次元(75日移動平均を意識)
     epochs = 3000           # 反復数（エポック数）
-    batch_size = 25         # バッチ処理数（仮として１か月分のデータ数）
+    batche_size = 80        # バッチサイズ
+    learning_rate = 0.001   # 学習率
+    earlyStopping = 10      # Val_lossの値が改善しなくなった時の学習打ち切り閾値
 
+    model = build_LSTMmodel()
+
+    model.fit(X_train,
+              Y_train,
+              batch_size= batche_size,
+              epochs = 3000,
+              callbacks=[earlyStopping],
+              validation_split= learning_rate
+              )
+    predicted = model.predict(X_test)
+
+
+    # 保存と読み込み
+    model.save("LSTM_test_model.h5")
+    load_model = load_model("LSTM_test_model.h5")
