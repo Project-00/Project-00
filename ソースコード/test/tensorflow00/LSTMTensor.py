@@ -28,7 +28,6 @@ def build_LSTMmodel(InputsData):
 
     model = Sequential()
 
-    model.add(PReLU())
     model.add(LSTM(n_hidden,
                    batch_input_shape=(None, n_in_size, n_out_size),
                    return_sequences=True,

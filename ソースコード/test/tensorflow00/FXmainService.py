@@ -124,7 +124,7 @@ if __name__ == "__main__":
                 # 売買関数
 
                 time.sleep(60)
-                # 終了時間判定(AM７時以下の時、0:00～6:59時の間になるとオペレーション終了)
+                # 終了時間判定(AM７時以下の時、20:00～6:59時の間になるとオペレーション終了)
                 endhour = GetHour()
                 if(endhour <= 7 or endhour > 20):
                     Operation = False
