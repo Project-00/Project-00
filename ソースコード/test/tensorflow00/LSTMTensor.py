@@ -10,6 +10,7 @@ from keras.models import Sequential
 from keras.layers import Activation, Dense
 from keras.layers import LSTM
 from keras.layers import Dropout
+from keras.callbacks import EarlyStopping
 from sklearn.preprocessing import MinMaxScaler
 from keras.layers.advanced_activations import PReLU
 from mongodb_read import mongodb_read
@@ -41,9 +42,9 @@ def build_LSTMmodel(InputsData):
     model.add(Dropout(dropout))
     model.add(Dense(units=150,activation=PReLU))
     model.add(Dropout(dropout))
-    model.add(Dense(units=1,activation=PReLU))
+    model.add(Dense(units=250,activation=PReLU))
 
-    model.compile(loss="mean_squared_error",
+    model.compile(loss="mse",
                   optimizer="adam",
                   metrics=["accuracy"])
     return model
@@ -158,7 +159,9 @@ def makePredictionModel(parameter):
     epochs = 3000           # 反復数（エポック数）
     batche_size = 80        # バッチサイズ
     learning_rate = 0.001   # 学習率
-    earlyStopping = 10      # Val_lossの値が改善しなくなった時の学習打ち切り閾値
+    earlyStopping = EarlyStopping(monitor= "val_loss",
+                                  mode="auto",
+                                  patience=0)      # Val_lossの値が改善しなくなった時の学習打ち切り閾値
 
     model = build_LSTMmodel()
 
@@ -169,9 +172,13 @@ def makePredictionModel(parameter):
               callbacks=[earlyStopping],
               validation_split= learning_rate
               )
-    predicted = model.predict(X_test)
+
+    # モデルの評価
+    loss_and_metrics = model.evaluate(X_test, Y_test, batch_size=batche_size)
+    # 新しいデータの予測
+    predicted = model.predict(X_test,batche_size=batche_size)
 
 
     # 保存と読み込み
     model.save("LSTM_test_model.h5")
-    load_model = load_model("LSTM_test_model.h5")
+    load_model = model.load_model("LSTM_test_model.h5")

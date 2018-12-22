@@ -67,7 +67,7 @@ def makePredictionModel(parameter):
 
 
     # ニューラルネットワークの設定
-    batch_size = 128        # 同時に処理する数
+    batch_size = 80         # 同時に処理する数
     mse_train = []          # 空箱にしておく(随時addしていくため）
     mse_test = []           # 上に同じ
 
