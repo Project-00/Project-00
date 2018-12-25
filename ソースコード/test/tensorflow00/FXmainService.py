@@ -71,7 +71,7 @@ if __name__ == "__main__":
     while(True):
         hour = GetHour()
         # 活動時間範囲を決める処理
-        if (hour <= 7):
+        if (hour < 7 or hour >= 20):
             Operation = False
             # 1分置きにチェックさせる
             time.sleep(60)
@@ -126,7 +126,7 @@ if __name__ == "__main__":
                 time.sleep(60)
                 # 終了時間判定(AM７時以下の時、20:00～6:59時の間になるとオペレーション終了)
                 endhour = GetHour()
-                if(endhour <= 7 or endhour > 20):
+                if(endhour < 7 or endhour >= 20):
                     Operation = False
 
             else:

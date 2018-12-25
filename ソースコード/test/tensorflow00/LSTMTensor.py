@@ -10,6 +10,7 @@ from keras.models import Sequential
 from keras.layers import Activation, Dense
 from keras.layers import LSTM
 from keras.layers import Dropout
+from keras.models import load_model
 from keras.callbacks import EarlyStopping
 from sklearn.preprocessing import MinMaxScaler
 from keras.layers.advanced_activations import PReLU
@@ -34,15 +35,15 @@ def build_LSTMmodel(InputsData):
                    return_sequences=True,
                    stateful=True))
     model.add(Dropout(dropout))
-    model.add(Dense(units=250,activation=PReLU))
+    model.add(Dense(units=256,activation=PReLU))
     model.add(Dropout(dropout))
-    model.add(Dense(unit=150,activation=PReLU))
+    model.add(Dense(unit=128,activation=PReLU))
     model.add(Dropout(dropout))
     model.add(Dense(units=75,activation=PReLU))
     model.add(Dropout(dropout))
-    model.add(Dense(units=150,activation=PReLU))
+    model.add(Dense(units=128,activation=PReLU))
     model.add(Dropout(dropout))
-    model.add(Dense(units=250,activation=PReLU))
+    model.add(Dense(units=256,activation=PReLU))
 
     model.compile(loss="mse",
                   optimizer="adam",
@@ -170,7 +171,8 @@ def makePredictionModel(parameter):
               batch_size= batche_size,
               epochs = 3000,
               callbacks=[earlyStopping],
-              validation_split= learning_rate
+              validation_split= learning_rate,
+              shuffle = False
               )
 
     # モデルの評価
@@ -181,4 +183,4 @@ def makePredictionModel(parameter):
 
     # 保存と読み込み
     model.save("LSTM_test_model.h5")
-    load_model = model.load_model("LSTM_test_model.h5")
+    model = load_model("LSTM_test_model.h5")
