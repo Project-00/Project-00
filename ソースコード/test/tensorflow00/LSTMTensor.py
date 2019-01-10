@@ -19,37 +19,6 @@ from mongodb_read import mongodb_read
 # 定数呼び出し
 c = sys.modules["const"]
 
-# LSTMのモデルを設定
-def build_LSTMmodel(InputsData):
-    n_in_size = InputsData.shape[1]      # len(Data)データの数
-    n_out_size = 1                  # len(Y[0])
-    n_hidden = 400                  # 隠れ層の数
-    Input_length = 0                # 入力系列数
-    dropout = 0.50                  # ドロップアウト
-
-
-    model = Sequential()
-
-    model.add(LSTM(n_hidden,
-                   batch_input_shape=(None, n_in_size, n_out_size),
-                   return_sequences=True,
-                   stateful=True))
-    model.add(Dropout(dropout))
-    model.add(Dense(units=256,activation=PReLU))
-    model.add(Dropout(dropout))
-    model.add(Dense(unit=128,activation=PReLU))
-    model.add(Dropout(dropout))
-    model.add(Dense(units=75,activation=PReLU))
-    model.add(Dropout(dropout))
-    model.add(Dense(units=128,activation=PReLU))
-    model.add(Dropout(dropout))
-    model.add(Dense(units=256,activation=PReLU))
-
-    model.compile(loss="mse",
-                  optimizer="adam",
-                  metrics=["accuracy"])
-    return model
-
 
 # -- 学習データ加工部分 --
 
@@ -139,6 +108,42 @@ def predictionDataMaker(parameter):
 
     return X_train, X_test, Y_train, Y_test, scaler, n_stocks
 
+# LSTMのモデルを設定
+def build_LSTMmodel(InputsData):
+    n_in_size1 = InputsData.shape[1]      # inputsDataの行数
+    n_in_size2 = InputsData.shape[2]      # inputsDataの列数
+    n_out_size = 1                       # len(Y[0])
+    Input_length = 0                     # 入力系列数
+    dropout = 0.50                       # ドロップアウト
+
+
+    model = Sequential()
+
+    model.add(LSTM(units=256,
+                   activation=PReLU,
+                   recurrent_activation=PReLU,
+                   use_bias=True,
+                   bias_initializer="zeros",
+                   dropout=0.5,
+                   recrrent_dropout=dropout,
+                   return_sequences=True,
+                   batch_input_shape=(80, n_in_size1, n_in_size2),
+                   stateful=True))
+    model.add(Dropout(dropout))
+    model.add(Dense(unit=75,activation=PReLU))
+    model.add(Dropout(dropout))
+    model.add(Dense(units=128,activation=PReLU))
+    model.add(Dropout(dropout))
+    model.add(Dense(units=75,activation=PReLU))
+    model.add(Dropout(dropout))
+    model.add(Dense(units=n_out_size,activation=PReLU))
+
+    model.compile(loss="mse",
+                  optimizer="adam",
+                  metrics=["accuracy"])
+    return model
+
+
 
 # parameterの中身 OPEN:始値 CLOSE:終値 HIGH:高値 LOW:安値
 def makePredictionModel(parameter):
@@ -156,7 +161,6 @@ def makePredictionModel(parameter):
     sess = tf.Session()
 
     # 設定
-    hidden = 80             # 出力次元(75日移動平均を意識)
     epochs = 3000           # 反復数（エポック数）
     batche_size = 80        # バッチサイズ
     learning_rate = 0.001   # 学習率
@@ -169,7 +173,7 @@ def makePredictionModel(parameter):
     model.fit(X_train,
               Y_train,
               batch_size= batche_size,
-              epochs = 3000,
+              epochs = epochs,
               callbacks=[earlyStopping],
               validation_split= learning_rate,
               shuffle = False
