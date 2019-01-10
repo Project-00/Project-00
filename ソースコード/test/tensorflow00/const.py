@@ -37,6 +37,9 @@ class _const(object):
     MONTH = "M"
     DAY = "D"
 
+    # アカウント切り替え
+    DEMO = "DEMO"
+    MAIN = "MAIN"
 import sys
 # 定数型を作成する関数
 sys.modules["const"] = _const()
