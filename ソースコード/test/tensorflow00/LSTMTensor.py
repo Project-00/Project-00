@@ -3,17 +3,20 @@ import re
 import string
 import numpy as np
 import matplotlib.pyplot as plt
+import pandas as pd
 import tensorflow as tf
 import os.path
 import sys
+import const
 from keras.models import Sequential
-from keras.layers import Activation, Dense
-from keras.layers import LSTM
+from keras.layers.core import Activation, Dense
+from keras.layers.recurrent import LSTM
 from keras.layers import Dropout
 from keras.models import load_model
 from keras.callbacks import EarlyStopping
 from sklearn.preprocessing import MinMaxScaler
 from keras.layers.advanced_activations import PReLU
+from keras.optimizers import Adam
 from mongodb_read import mongodb_read
 
 # 定数呼び出し
@@ -108,42 +111,6 @@ def predictionDataMaker(parameter):
 
     return X_train, X_test, Y_train, Y_test, scaler, n_stocks
 
-# LSTMのモデルを設定
-def build_LSTMmodel(InputsData):
-    n_in_size1 = InputsData.shape[1]      # inputsDataの行数
-    n_in_size2 = InputsData.shape[2]      # inputsDataの列数
-    n_out_size = 1                       # len(Y[0])
-    Input_length = 0                     # 入力系列数
-    dropout = 0.50                       # ドロップアウト
-
-
-    model = Sequential()
-
-    model.add(LSTM(units=256,
-                   activation=PReLU,
-                   recurrent_activation=PReLU,
-                   use_bias=True,
-                   bias_initializer="zeros",
-                   dropout=0.5,
-                   recrrent_dropout=dropout,
-                   return_sequences=True,
-                   batch_input_shape=(80, n_in_size1, n_in_size2),
-                   stateful=True))
-    model.add(Dropout(dropout))
-    model.add(Dense(unit=75,activation=PReLU))
-    model.add(Dropout(dropout))
-    model.add(Dense(units=128,activation=PReLU))
-    model.add(Dropout(dropout))
-    model.add(Dense(units=75,activation=PReLU))
-    model.add(Dropout(dropout))
-    model.add(Dense(units=n_out_size,activation=PReLU))
-
-    model.compile(loss="mse",
-                  optimizer="adam",
-                  metrics=["accuracy"])
-    return model
-
-
 
 # parameterの中身 OPEN:始値 CLOSE:終値 HIGH:高値 LOW:安値
 def makePredictionModel(parameter):
@@ -156,35 +123,85 @@ def makePredictionModel(parameter):
     Y_test = pdm[3]     # 目的テストデータ群
     scaler = pdm[4]     # 値を戻す時に使う（スカラ倍）
     n_stocks = pdm[5]   # 要素数
-
-    # セッション開始の奴
-    sess = tf.Session()
+    
+    X_train = np.reshape(X_train, (X_train.shape[0], 1, X_train.shape[1]))
+    X_test = np.reshape(X_test, (X_test.shape[0], 1, X_test.shape[1]))
 
     # 設定
-    epochs = 3000           # 反復数（エポック数）
-    batche_size = 80        # バッチサイズ
-    learning_rate = 0.001   # 学習率
+    epochs = 1           # 反復数（エポック数）
+    batche_size = 1        # バッチサイズ
     earlyStopping = EarlyStopping(monitor= "val_loss",
                                   mode="auto",
-                                  patience=0)      # Val_lossの値が改善しなくなった時の学習打ち切り閾値
+                                  patience=20,
+                                  min_delta=0,
+                                  verbose=0
+                                  )      # Val_lossの値が改善しなくなった時の学習打ち切り閾値
 
-    model = build_LSTMmodel()
-
-    model.fit(X_train,
-              Y_train,
-              batch_size= batche_size,
-              epochs = epochs,
-              callbacks=[earlyStopping],
-              validation_split= learning_rate,
-              shuffle = False
-              )
-
-    # モデルの評価
-    loss_and_metrics = model.evaluate(X_test, Y_test, batch_size=batche_size)
-    # 新しいデータの予測
-    predicted = model.predict(X_test,batche_size=batche_size)
+    # LSTMのモデルを設定
+    # modelをトレーニングデータに合わせて構築
+    n_in_size = X_train.shape[1]        # 入力の要素数
+    n_out_size = 1                       # 出力の数
+    dropout = 0.50                       # ドロップアウト
+    optimizer = Adam(lr = 0.001)         # 最適化関数と学習率
+    n_hidden = 256                       # 隠れ層のニューロン数
+    input_dim = 7                        # 出力次元
+    activation = PReLU(alpha_initializer='zeros', alpha_regularizer=None, alpha_constraint=None, shared_axes=None)
+    n_inputs = 1
+    n_outputs = 1
 
 
-    # 保存と読み込み
-    model.save("LSTM_test_model.h5")
-    model = load_model("LSTM_test_model.h5")
+    X = tf.placeholder(tf.float32, [None, n_steps, n_inputs])
+    Y = tf.placeholder(tf.float32, [None, n_steps, n_outputs])
+
+    # モデル構築
+    model = Sequential()
+
+    model.add(LSTM(n_hidden,
+                   batch_input_shape=(batche_size,n_in_size,input_dim),    # batch_size,timesteps,input_dim
+                   activation=activation,
+                   recurrent_activation=activation,
+                   recurrent_initializer="zeros",
+                   use_bias=True,
+                   bias_initializer="zeros",
+                   dropout=dropout,
+                   recurrent_dropout=dropout,
+                   kernel_initializer = "he_normal"))
+    # model.add(Dense(75,input_shape=(None,256),activation=activation,kernel_initializer = "he_normal"))
+    # model.add(Dropout(dropout))
+    # model.add(Dense(128,input_shape=(None,75),activation=activation,kernel_initializer = "he_normal"))
+    # model.add(Dropout(dropout))
+    # model.add(Dense(75,input_shape=(None,128),activation=activation,kernel_initializer = "he_normal"))
+    # model.add(Dropout(dropout))
+    model.add(Dense(n_out_size,activation=activation,kernel_initializer = "he_normal"))
+
+    model.compile(loss="mse",
+                  optimizer= optimizer,
+                  metrics=["accuracy"])
+
+    hist =  model.fit(X_train,
+                      Y_train,
+                      batch_size= batche_size,
+                      epochs = epochs,
+                      callbacks=[earlyStopping],
+                      )
+
+    # 損失のグラフ化
+    loss = hist.history['loss']
+    epochs = len(loss)
+    plt.rc('font', family='serif')
+    fig = plt.figure()
+    fig.patch.set_facecolor('white')
+    plt.plot(range(epochs), loss, marker='.', label='loss(training data)')
+    plt.show()
+
+    # 予測結果
+    predicted = model.predict(X_test,batch_size=batche_size)
+    # predicted = scaler.inverse_transform(predicted)
+    result = pd.DataFrame(predicted)
+    result.columns = ['predict']
+    result['actual'] = Y_test
+    result.plot()
+    plt.show()
+
+if __name__ == "__main__":
+    makePredictionModel(c.CLOSE)

@@ -20,11 +20,11 @@ c = sys.modules["const"]
 def UpdateJob():
 
     # 未決済のトレード情報
-    OpenTrade = OpenOrder(c.DEMO)
+    OpenTrade = OpenOrder()
     # トレード情報を取得
-    TradeData = Trades(c.DEMO)
+    TradeData = Trades()
     # トレード履歴のリスト
-    TradeLog = HistricalTrade(c.DEMO,10)
+    TradeLog = HistricalTrade(10)
 
     # アカウントのデータ更新　以下が入ってる
     # {'accountId': 2412596,        アカウントID
@@ -38,7 +38,7 @@ def UpdateJob():
     #  'marginAvail': 3000000,
     #  'accountName': 'Primary',    アカウントの名前
     #  'accountCurrency': 'JPY'}    アカウントの国籍
-    AccountData = ResponsAccountDetail(c.DEMO)
+    AccountData = ResponsAccountDetail()
 
     print("未決済のトレード情報：")
     print(OpenTrade)
@@ -61,7 +61,8 @@ if __name__ == "__main__":
 
     while(True):
 
-
+        # スケジューラー発動
+        schedule.run_pending()
         # 日付をdatatime形式で取得する処理
         CheckTime = LateDate(1)
         # 営業日か判定する処理
@@ -101,8 +102,6 @@ if __name__ == "__main__":
             # 1分置きにチェックさせる
             time.sleep(60)
         else:
-            # スケジューラー発動
-            schedule.run_pending()
             # １分ごとにする処理
             # 現在のレートを格納
             Now_Rate = OandaTimeRate()

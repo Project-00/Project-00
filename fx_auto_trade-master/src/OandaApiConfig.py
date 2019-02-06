@@ -2,10 +2,6 @@
 
 import oandapy
 import pandas as pd
-import sys
-import const
-# 定数型の文字列を呼び出す(OPEN,CLOSE,HIGH,LOW)が入ってる　例：c.OPEN
-c = sys.modules["const"]
 import configparser
 config = configparser.ConfigParser()
 config.read("config.ini")
@@ -16,13 +12,12 @@ config.sections()
 account_id = int(config["OANDA"]["account_id"])
 api_key = config["OANDA"]["api_key"]
 
+oanda = oandapy.API(environment="practice", access_token=api_key)
 
 # ----------トレードの管理系関数群--------------
 
 # 口座の詳細情報を取得する関数
-def ResponsAccountDetail(prm):
-    environment = config[prm]["environment"]
-    oanda = oandapy.API(environment=environment, access_token=api_key)
+def ResponsAccountDetail():
     res_acct_detail = oanda.get_account(account_id= account_id)
     # balance: 口座残高
     # realizedPI: 実現損益
@@ -30,17 +25,13 @@ def ResponsAccountDetail(prm):
     return res_acct_detail
 
 # オープントレードを取得(未決済のトレード表示)
-def OpenOrder(prm):
-    environment = config[prm]["environment"]
-    oanda = oandapy.API(environment=environment, access_token=api_key)
+def OpenOrder():
     open_orders = oanda.get_orders(account_id= account_id)
 
     return open_orders
 
 # トレード情報を取得
-def Trades(prm):
-    environment = config[prm]["environment"]
-    oanda = oandapy.API(environment=environment, access_token=api_key)
+def Trades():
     trades = oanda.get_trades(account_id= account_id)
     trades = pd.DataFrame(trades["trades"])
 
@@ -48,9 +39,7 @@ def Trades(prm):
 
 # トレード履歴を取得
 # count :　取得件数を入力
-def HistricalTrade(prm,count):
-    environment = config[prm]["environment"]
-    oanda = oandapy.API(environment=environment, access_token=api_key)
+def HistricalTrade(count):
     trade_hist = oanda.get_transaction_history(account_id= account_id,count= count)
     trade_hist = pd.DataFrame(trade_hist["transactions"])
 
@@ -63,9 +52,7 @@ def HistricalTrade(prm,count):
 # ストリーミング成行注文
 # unitsは通貨量（ドル指定なら1000ドル,円指定なら1000円）統一化する量:　数字
 # sideは買い側か売り側か等を入力(売り:"sell",買い:"buy")
-def Order(prm,Price,Units,Side):
-    environment = config[prm]["environment"]
-    oanda = oandapy.API(environment=environment, access_token=api_key)
+def Order(Price,Units,Side):
     order = oanda.create_order(account_id= account_id,
                                instrument = "USD_JPY",
                                price = Price,
@@ -80,9 +67,7 @@ def Order(prm,Price,Units,Side):
 # Priceには値段を入れる
 # Unitsには通貨量をいれる
 # Sideには買い側か売り側か入力(売り:"sell",買い:"buy")
-def LimitOrder(prm,LimitTime,Price,Units,Side):
-    environment = config[prm]["environment"]
-    oanda = oandapy.API(environment=environment, access_token=api_key)
+def LimitOrder(LimitTime,Price,Units,Side):
     limit_order = oanda.create_order(account_id= account_id,
                                      instrument = "USD_JPY",
                                      price = Price,
@@ -98,9 +83,7 @@ def LimitOrder(prm,LimitTime,Price,Units,Side):
 # Priceには値段を入れる
 # Unitsには通貨量をいれる
 # Sideには買い側か売り側か入力(売り:"sell",買い:"buy")
-def StopOrder(prm,LimitTime,Price,Units,Side):
-    environment = config[prm]["environment"]
-    oanda = oandapy.API(environment=environment, access_token=api_key)
+def StopOrder(LimitTime,Price,Units,Side):
     stop_order = oanda.create_order(account_id= account_id,
                                     instrument = "USD_JPY",
                                     price = Price,
@@ -116,9 +99,7 @@ def StopOrder(prm,LimitTime,Price,Units,Side):
 # Low: 損切りレート
 # Unitsには通貨量をいれる
 # Sideには買い側か売り側か入力(売り:"sell",買い:"buy")
-def MKOrder(prm,High,Low,Units,Side):
-    environment = config[prm]["environment"]
-    oanda = oandapy.API(environment=environment, access_token=api_key)
+def MKOrder(High,Low,Units,Side):
     order_mk = oanda.create_order(account_id= account_id,
                                   instrument="USD_JPY",
                                   units= Units,
@@ -132,9 +113,7 @@ def MKOrder(prm,High,Low,Units,Side):
 # オープントレードからオーダーIDを取得してOrder_idにいれること
 # Priceには希望価格を入力
 # unitsには通貨量を入力
-def ChangeOrder(prm,Order_id,Price,Units):
-    environment = config[prm]["environment"]
-    oanda = oandapy.API(environment=environment, access_token=api_key)
+def ChangeOrder(Order_id,Price,Units):
     changeorder = oanda.modify_order(account_id= account_id,
                                      instrument = "USD_JPY",
                                      order_id=Order_id,

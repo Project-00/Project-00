@@ -16,12 +16,12 @@ PreData = mongodb_read(c.PREDICTION_COL)
 PreData = PreData.sort_values(by="time")
 PreData = PreData.reset_index()
 
-Data = Data.ix[:, ["time", "open"]]
-PreData = PreData.ix[:, ["time", "open"]]
+Data = Data.ix[:, ["time", "close"]]
+PreData = PreData.ix[:, ["time", "close"]]
 
 Data = Data[len(Data.index) - len(PreData.index) - 1:]
 
 plt.figure()
-ax = Data[-7:].plot(x="time",y="open")
-PreData[-8:].plot(x="time",y="open" ,ax = ax)
+ax = Data[-7:].plot(x="time",y="close")
+PreData[-8:].plot(x="time",y="close" ,ax = ax)
 print("描画")
