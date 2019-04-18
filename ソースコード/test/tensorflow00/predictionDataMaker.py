@@ -26,25 +26,74 @@ def predictionDataMaker(parameter):
 
     # parameter毎に順序切り替え
     if parameter == c.CLOSE:
-        df = df.ix[:, ["time", "close", "open", "high", "low", "volume","fiveave","tenave","fiftave"]]
+        df = df.ix[:, ["time", "close", "open", "high", "low", "volume","fiveave","tenave","fiftave",'tma5','tma10',
+             'tma15','ema5','ema10','ema15','dema5','dema10','dema15',
+             'tema5','tema10','tema15','wma5','wma10','wma15','trend',
+             'bbands5up','bbands5mid','bbands5low','bbands10up','bbands10mid',
+             'bbands10low','bbands15up','bbands15mid','bbands15low',
+             'rocp5','rocp10','rocp15','mom5','mom10','mom15','rsi5','rsi10',
+             'rsi15','MACD','MACDsig','MACDhist','apo5','apo10','apo15',
+             'ppo5','ppo10','ppo15','cmo5','cmo10','cmo15']]
         prm = ["close"]
     if parameter == c.OPEN:
-        df = df.ix[:, ["time", "open", "close", "high", "low", "volume","fiveave","tenave","fiftave"]]
+        df = df.ix[:, ["time", "open", "close", "high", "low", "volume","fiveave","tenave","fiftave",'tma5','tma10',
+             'tma15','ema5','ema10','ema15','dema5','dema10','dema15',
+             'tema5','tema10','tema15','wma5','wma10','wma15','trend',
+             'bbands5up','bbands5mid','bbands5low','bbands10up','bbands10mid',
+             'bbands10low','bbands15up','bbands15mid','bbands15low',
+             'rocp5','rocp10','rocp15','mom5','mom10','mom15','rsi5','rsi10',
+             'rsi15','MACD','MACDsig','MACDhist','apo5','apo10','apo15',
+             'ppo5','ppo10','ppo15','cmo5','cmo10','cmo15']]
         prm = ["open"]
     if parameter == c.HIGH:
-        df = df.ix[:, ["time", "high", "close", "open", "low", "volume","fiveave","tenave","fiftave"]]
+        df = df.ix[:, ["time", "high", "close", "open", "low", "volume","fiveave","tenave","fiftave",'tma5','tma10',
+             'tma15','ema5','ema10','ema15','dema5','dema10','dema15',
+             'tema5','tema10','tema15','wma5','wma10','wma15','trend',
+             'bbands5up','bbands5mid','bbands5low','bbands10up','bbands10mid',
+             'bbands10low','bbands15up','bbands15mid','bbands15low',
+             'rocp5','rocp10','rocp15','mom5','mom10','mom15','rsi5','rsi10',
+             'rsi15','MACD','MACDsig','MACDhist','apo5','apo10','apo15',
+             'ppo5','ppo10','ppo15','cmo5','cmo10','cmo15']]
         prm = ["high"]
     if parameter == c.LOW:
-        df = df.ix[:, ["time", "low", "close", "open", "high", "volume","fiveave","tenave","fiftave"]]
+        df = df.ix[:, ["time", "low", "close", "open", "high", "volume","fiveave","tenave","fiftave",'tma5','tma10',
+             'tma15','ema5','ema10','ema15','dema5','dema10','dema15',
+             'tema5','tema10','tema15','wma5','wma10','wma15','trend',
+             'bbands5up','bbands5mid','bbands5low','bbands10up','bbands10mid',
+             'bbands10low','bbands15up','bbands15mid','bbands15low',
+             'rocp5','rocp10','rocp15','mom5','mom10','mom15','rsi5','rsi10',
+             'rsi15','MACD','MACDsig','MACDhist','apo5','apo10','apo15',
+             'ppo5','ppo10','ppo15','cmo5','cmo10','cmo15']]
         prm = ["low"]
     if parameter == c.FIVEAVE:
-        df = df.ix[:, ["time", "fiveave", "close", "open", "high", "volume","low","tenave","fiftave"]]
+        df = df.ix[:, ["time", "fiveave", "close", "open", "high", "volume","low","tenave","fiftave",'tma5','tma10',
+             'tma15','ema5','ema10','ema15','dema5','dema10','dema15',
+             'tema5','tema10','tema15','wma5','wma10','wma15','trend',
+             'bbands5up','bbands5mid','bbands5low','bbands10up','bbands10mid',
+             'bbands10low','bbands15up','bbands15mid','bbands15low',
+             'rocp5','rocp10','rocp15','mom5','mom10','mom15','rsi5','rsi10',
+             'rsi15','MACD','MACDsig','MACDhist','apo5','apo10','apo15',
+             'ppo5','ppo10','ppo15','cmo5','cmo10','cmo15']]
         prm = ["fiveave"]
     if parameter == c.TENAVE:
-        df = df.ix[:, ["time", "tenave", "close", "open", "high", "volume","low","fiveave","fiftave"]]
+        df = df.ix[:, ["time", "tenave", "close", "open", "high", "volume","low","fiveave","fiftave",'tma5','tma10',
+             'tma15','ema5','ema10','ema15','dema5','dema10','dema15',
+             'tema5','tema10','tema15','wma5','wma10','wma15','trend',
+             'bbands5up','bbands5mid','bbands5low','bbands10up','bbands10mid',
+             'bbands10low','bbands15up','bbands15mid','bbands15low',
+             'rocp5','rocp10','rocp15','mom5','mom10','mom15','rsi5','rsi10',
+             'rsi15','MACD','MACDsig','MACDhist','apo5','apo10','apo15',
+             'ppo5','ppo10','ppo15','cmo5','cmo10','cmo15']]
         prm = ["tenave"]
     if parameter == c.FIFTAVE:
-        df = df.ix[:, ["time", "fiftave", "close", "open", "high", "volume","low","fiveave","tenave"]]
+        df = df.ix[:, ["time", "fiftave", "close", "open", "high", "volume","low","fiveave","tenave",'tma5','tma10',
+             'tma15','ema5','ema10','ema15','dema5','dema10','dema15',
+             'tema5','tema10','tema15','wma5','wma10','wma15','trend',
+             'bbands5up','bbands5mid','bbands5low','bbands10up','bbands10mid',
+             'bbands10low','bbands15up','bbands15mid','bbands15low',
+             'rocp5','rocp10','rocp15','mom5','mom10','mom15','rsi5','rsi10',
+             'rsi15','MACD','MACDsig','MACDhist','apo5','apo10','apo15',
+             'ppo5','ppo10','ppo15','cmo5','cmo10','cmo15']]
         prm = ["fiftave"]
 
     print(parameter + "を計算します")

@@ -98,7 +98,7 @@ def predictionDataMaker(parameter):
 
     return df_2, df_test
 
-def LSTMprediction():
+def LSTM2prediction():
 
     df,df_test = predictionDataMaker(c.CLOSE)
     # df = df[-2600:]
@@ -117,8 +117,8 @@ def LSTMprediction():
 
     # データの正規化
     scaler = MinMaxScaler(feature_range=(-1, 1))  # -1から1の範囲に正規化する設定
-    # scaler.fit(data_train)  # 教師データを元に正規化設定（テストデータは必要ない）
-    scaler.fit(df[-260:])
+    scaler.fit(df[-260:])  # 教師データを元に正規化設定（テストデータは必要ない）
+
     # norm→ノーマライゼーション（正規化の略称）
     data_train_norm = scaler.transform(data_train)  # 教師データの正規化
     data_test_norm = scaler.transform(data_test)  # テストデータの正規化
@@ -149,16 +149,17 @@ def LSTMprediction():
 
     # LSTMのモデルを設定
     # modelをトレーニングデータに合わせて構築
+    n_in_size = X_train.shape[1]         # 入力の要素数
     n_out_size = 1                       # 出力の数
     dropout = 0.25                       # ドロップアウト
     optimizer = Adam(lr = 0.001)         # 最適化関数と学習率
     n_hidden = 256                       # 隠れ層のニューロン数
-    # activation = PReLU(alpha_initializer='zeros', alpha_regularizer=None, alpha_constraint=None, shared_axes=None)
+    activation = PReLU(alpha_initializer='random_normal', alpha_regularizer=None, alpha_constraint=None, shared_axes=None)
 
     # モデル構築
     model = Sequential()
 
-    model.add(LSTM(n_hidden,
+    model.add(LSTM(256,
                    input_shape=(1,X_train.shape[-1]),
                    activation="relu",
                    recurrent_initializer="random_normal",
@@ -166,15 +167,18 @@ def LSTMprediction():
                    bias_initializer="random_normal",
                    dropout=dropout,
                    recurrent_dropout=dropout,
-                   kernel_initializer = "random_normal"))
+                   kernel_initializer = "random_normal",
+                   return_sequences=True
+                   ))
 
-    model.add(Dense(128,activation="linear"))
-    model.add(Dropout(dropout))
-    model.add(Dense(64,activation="linear"))
-    model.add(Dropout(dropout))
-    model.add(Dense(128,activation="linear"))
-    model.add(Dropout(dropout))
+    model.add(LSTM(128,
+                   # input_shape=(1,X_train.shape[-1]),
+                   activation="relu",
+                   dropout=dropout
+                   ))
+
     model.add(Dense(n_out_size))
+
 
     model.compile(loss="mse",
                   optimizer= optimizer,
@@ -198,14 +202,14 @@ def LSTMprediction():
 
     return result
 
-
+#
 if __name__ == "__main__":
+    prediction = LSTM2prediction()
+    print(prediction)
 
-    pre = LSTMprediction()
-    print(pre)
 #     df = predictionDataMaker(c.CLOSE)
-#     # df = df[-2600:]
-#     # df = df.reset_index()
+#
+#     df_copy = df.copy()
 #     # データセットの行数と列を格納
 #     n = df.shape[0]  # 行
 #     p = df.shape[1]  # 列
@@ -214,18 +218,21 @@ if __name__ == "__main__":
 #     # 訓練データとテストデータへ切り分け
 #     train_start = 0
 #     train_end = int(np.floor(n * 0.99))  # 前から数えて行全体の８割を教師データとして扱う
+#     # train_end = int(n - 1)
 #     test_start = train_end   # 教師データ以降のデータをテストデータとして扱う
 #     test_end = n
 #     data_train = df[train_start:train_end]  # トレーニングの幅の設定
 #     data_test = df[test_start:test_end]  # テストの幅の設定
 #
-#     checkdf = df[test_start:test_end]
+#     checkdf = df_copy[test_start:test_end]  # 比較のために元の値のままの奴を隔離
 #     checkdf = checkdf.iloc[:,0]
 #     checkdf = checkdf.reset_index()
 #
+#
 #     # データの正規化
 #     scaler = MinMaxScaler(feature_range=(-1, 1))  # -1から1の範囲に正規化する設定
-#     scaler.fit(df[-260:])  # 教師データを元に正規化設定（テストデータは必要ない）
+#     # scaler.fit(data_test)  # 教師データを元に正規化設定
+#     scaler.fit(df[-260:])
 #
 #     # norm→ノーマライゼーション（正規化の略称）
 #     data_train_norm = scaler.transform(data_train)  # 教師データの正規化
@@ -246,7 +253,7 @@ if __name__ == "__main__":
 #
 #
 #     # 設定
-#     epochs = 50           # 反復数（エポック数）
+#     epochs = 100           # 反復数（エポック数）
 #     batche_size = 1        # バッチサイズ
 #     earlyStopping = EarlyStopping(monitor= "val_loss",
 #                                   mode="auto",
@@ -262,12 +269,12 @@ if __name__ == "__main__":
 #     dropout = 0.25                       # ドロップアウト
 #     optimizer = Adam(lr = 0.001)         # 最適化関数と学習率
 #     n_hidden = 256                       # 隠れ層のニューロン数
-#     # activation = PReLU(alpha_initializer='zeros', alpha_regularizer=None, alpha_constraint=None, shared_axes=None)
+#     activation = PReLU(alpha_initializer='random_normal', alpha_regularizer=None, alpha_constraint=None, shared_axes=None)
 #
 #     # モデル構築
 #     model = Sequential()
 #
-#     model.add(LSTM(n_hidden,
+#     model.add(LSTM(256,
 #                    input_shape=(1,X_train.shape[-1]),
 #                    activation="relu",
 #                    recurrent_initializer="random_normal",
@@ -275,15 +282,18 @@ if __name__ == "__main__":
 #                    bias_initializer="random_normal",
 #                    dropout=dropout,
 #                    recurrent_dropout=dropout,
-#                    kernel_initializer = "random_normal"))
+#                    kernel_initializer = "random_normal",
+#                    return_sequences=True
+#                    ))
 #
-#     model.add(Dense(128,activation="linear"))
-#     model.add(Dropout(dropout))
-#     model.add(Dense(64,activation="linear"))
-#     model.add(Dropout(dropout))
-#     model.add(Dense(128,activation="linear"))
-#     model.add(Dropout(dropout))
+#     model.add(LSTM(128,
+#                    # input_shape=(1,X_train.shape[-1]),
+#                    activation="relu",
+#                    dropout=dropout
+#                    ))
+#
 #     model.add(Dense(n_out_size))
+#
 #
 #     model.compile(loss="mse",
 #                   optimizer= optimizer,
@@ -308,8 +318,10 @@ if __name__ == "__main__":
 #
 #     # 予測結果
 #     pre = model.predict(X_test,batch_size=batche_size)
-#     X_test = np.reshape(X_test, (X_test.shape[0], res))
+#     X_test = np.reshape(X_test, (X_test.shape[0],res))
 #     pre = np.concatenate([pre, X_test], 1)
+#     # pre = pd.DataFrame(pre)
+#     # pre = Y_train.append(pre)
 #     predicted = scaler.inverse_transform(pre)
 #     result = pd.DataFrame(predicted)
 #     # Y_test = np.reshape(Y_test,(Y_test.shape[0],1))
@@ -317,10 +329,10 @@ if __name__ == "__main__":
 #     # Y_test = scaler.inverse_transform(Y_test)
 #     # Y_test = pd.DataFrame(Y_test)
 #     plt.figure()
-#     ax = result.iloc[:,0].plot(label="predict")
+#     ax = result.iloc[:,0].plot()
 #     # Y_test.iloc[:,0].plot(ax= ax)
-#     checkdf.iloc[:, 1].plot(label="close",ax= ax)
+#     checkdf.iloc[:, 1].plot(ax= ax)
 #     plt.show()
-    # print(predicted[-1,0])
-
+#     # print(predicted[-1,0])
+#
 

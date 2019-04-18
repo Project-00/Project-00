@@ -20,6 +20,7 @@ class _const(object):
     STUDY_COL = "USD_JPY_RATE"
     PREDICTION_COL = "P_USD_JPY_RATE"
     MOVINGAVERAGE_COL = "M_USD_JPY_RATE"
+    DECISION_COL = "DECISION_DATA"
 
     # 4本値定数
     OPEN = "OPEN"
