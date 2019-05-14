@@ -22,6 +22,7 @@ import oandapy
 
 api_key = config["OANDA"]["api_key"]
 oanda = oandapy.API(environment="practice", access_token= api_key)
+AccountData = ResponsAccountDetail(c.DEMO)
 
 c = sys.modules["const"]
 act = True
@@ -373,7 +374,6 @@ if __name__ == "__main__":
 
     # 値をＮ個格納するキューのリスト
     queue = deque()
-    AccountData = ResponsAccountDetail(c.DEMO)
 
     while(True):
 
