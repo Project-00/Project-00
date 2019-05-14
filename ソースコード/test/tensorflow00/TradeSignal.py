@@ -1,13 +1,10 @@
 # -*- coding: utf8 -*-
 
 import numpy as np
-from mongodb_read import *
-from OandaApiConfig import *
 from FxMainService import *
 from OandaApiConfig import *
 from TechnicalApproach import *
-from sklearn import linear_model
-import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
 import sys
 import const
 c = sys.modules["const"]
@@ -78,15 +75,29 @@ StandardClose : 21時点のCloseの予測値
 #
 # print(trend)
 
-def TradeSignal(Now_Rate,queue,Units,StandardClose):
-    Tilt = "queueの15個分程度を線形回帰した時の傾き"
+def TradeOrder(Now_Rate,queue,Units,StandardClose):
+    UseList = [queue[i][0] for i in range(len(queue)-60,-1)]
+    UseList = changelist1(UseList)
+
+    # 単回帰のためのList
+    TiltList1 = [queue[i][0] for i in range(len(queue)-15,-1)]      # Y軸用の現在の値集合（目的関数）
+    TiltList2 = [queue[i][1] for i in range(len(queue)-15,-1)]      # X軸用の時間の集合（説明関数）
+    TiltList1 = changelist1(TiltList1)      # 1次元のリストに直している
+    TiltList2 = changelist1(TiltList2)      # 1次元のリストに直している
+
+    lr = LinearRegression()
+    X = TiltList2
+    Y = TiltList1
+    lr.fit(X,Y)
+
+    Tilt = lr.coef_[0] # 傾き
 
     # 売り側か買う側か細かく事象を決めておく処理
     # 現在の値が予測よりも上の時の処理
     if Now_Rate >= StandardClose:
         # 傾きが上を向いているとき
         if Tilt >= 0.3:
-            Band = BBANDS(queue[0][-60:],5)
+            Band = BBANDS(UseList,5)
             # 96%の信頼区間を超えてるのでこの先も伸びる想定（）
             if Band[0][-1] <= Now_Rate:
                 return
@@ -95,7 +106,7 @@ def TradeSignal(Now_Rate,queue,Units,StandardClose):
                 Side = "sell"
         # 傾きが横ばいで不安定の時、逆行現象のシグナルを見つける（結局下へ向かうのが分かる）
         elif (Tilt < 0.3) and (Tilt > -0.3):
-            RsiScore = RSI(queue[0][-60:],14)
+            RsiScore = RSI(UseList,14)
             # 今の動きの最高値付近を叩いてる状態なので反転に備えて売りに入る
             if RsiScore > 80:
                 Side = "sell"
@@ -113,7 +124,7 @@ def TradeSignal(Now_Rate,queue,Units,StandardClose):
             Side = "buy"
         # 傾きが横ばいで不安定の時、逆行シグナルを見つける（結局上に向かうのが分かる）
         elif (Tilt < 0.3) and (Tilt > -0.3):
-            RsiScore = RSI(queue[0][-60:],14)
+            RsiScore = RSI(UseList,14)
             # 売値の下限付近を叩いてる状態なので反転に備えて買っておく
             if RsiScore < 20:
                 Side = "buy"
@@ -122,7 +133,7 @@ def TradeSignal(Now_Rate,queue,Units,StandardClose):
                 return
         # 傾きが下を向いているとき
         else:
-            Band = BBANDS(queue[0][-60:],5)
+            Band = BBANDS(UseList,5)
             # 信頼区間96%を超えてる場合はまだ下がり続けるので下がりきるまで触らない
             if Band[2][-1] <= Now_Rate:
                 return
@@ -130,8 +141,13 @@ def TradeSignal(Now_Rate,queue,Units,StandardClose):
             else:
                 Side = "buy"
 
-
-    # 注文を行う処理
-    Order(c.DEMO,Now_Rate,Units,Side)
+    # 預金が十二分にあるとき動くようにする。資金が無ければ注文はしない。
+    if (Side == "buy") and (Now_Rate * Unit < Balance):
+        # 注文を行う処理
+        Order(c.DEMO,Now_Rate,Units,Side)
+    elif (Side == "sell") and (Now_Rate * Unit < Balance):
+        Order(c.DEMO, Now_Rate, Units, Side)
+    else:
+        return
 
     return

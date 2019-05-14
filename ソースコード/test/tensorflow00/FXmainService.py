@@ -11,6 +11,7 @@ from datetime import timedelta
 from dateutil.relativedelta import relativedelta
 from previousDataOanda import *
 from collections import deque
+from TradeSignal import *
 import numpy as np
 import pymongo
 import schedule
@@ -569,8 +570,8 @@ if __name__ == "__main__":
             # 売買関数
             # トレンド推移状況を見るためのqueueが十分にそろってから動くようにする
             if len(queue) >60:
-                """TradeSignal()を入れる"""
+                O = TradeOrder(Now_Rate,queue,Unit,StandardClose)
 
             act = False
-            time.sleep(60)
+            time.sleep(30)
 
