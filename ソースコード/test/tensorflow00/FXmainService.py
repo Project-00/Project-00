@@ -10,6 +10,7 @@ from datetime import datetime as dt
 from datetime import timedelta
 from dateutil.relativedelta import relativedelta
 from previousDataOanda import *
+from collections import deque
 import numpy as np
 import pymongo
 import schedule
@@ -152,7 +153,7 @@ def oneDatamake(key):
 
     checkhour = GetHour()
 
-    if((key == True) and (checkhour >= 21)):
+    if((key == True) and ((checkhour >= 21) or (checkhour <= 1))):
         # 登録の重複を防ぐための措置
         check = mongodb_read(c.STUDY_COL)
         check = check.sort_values(by="time")
@@ -161,6 +162,7 @@ def oneDatamake(key):
 
         time = GetDate()
         # 夜中に更新すると翌日の予想なのに日付がずれるので修正
+
         time = dt.strptime(time, '%Y/%m/%d')
         time = time + timedelta(days=1)
         time = time.strftime('%Y/%m/%d')
@@ -170,6 +172,14 @@ def oneDatamake(key):
 
             usdJpyDataList = []
             Date = dt.now()
+
+            # 0時過ぎてしまった時の緊急用措置軍
+            if(checkhour <=7):
+                Date = Date - timedelta(days = 1)
+                time = dt.strptime(time, '%Y/%m/%d')
+                time = time - timedelta(days=1)
+                time = time.strftime('%Y/%m/%d')
+
             # OpenDate = dt(Date.year,Date.month,Date.day,7,0,0,0)
             CloseDate = dt(Date.year,Date.month,Date.day,21,0,0,0)
             # opentime = OpenDate.isoformat('T')
@@ -235,6 +245,7 @@ def oneDatamake(key):
             print("学習用のデータベースの更新完了")
             result = True
 
+
     return result
 
 
@@ -246,6 +257,14 @@ if __name__ == "__main__":
     # 初期化値
     act, PClose, PLClose, PL2Close, PFive, PTen, PFift, SClose, FiveClose, TenClose, FiftClose\
         , probPClose, probPLClose, probPL2Close, probFiveClose, probTenClose, probFiftClose = ini()
+
+    U_i = mongodb_read(c.STUDY_COL)
+    U_i = U_i.sort_values(by="time")
+    U_i = U_i.reset_index()
+    last = len(U_i) - 1
+    # 値をＮ個格納するキューのリスト（初期値は前日のCloseの値で埋めておく）
+    queue = deque([U_i["close"][last]])
+    AccountData = ResponsAccountDetail(c.DEMO)
 
     while(True):
 
@@ -259,6 +278,7 @@ if __name__ == "__main__":
         if (workdays.networkdays(CheckTime, CheckTime) >= 1):
             Time = CheckTime.strftime('%Y/%m/%d')
             # predictionServiceのデータベース更新の確認が取れたら起動
+            # １日の方針情報の更新
             if (update == True):
                 PredictionScore(PClose,PLClose,PL2Close,FiveClose,TenClose,FiftClose)
                 preresult = predictionService()
@@ -287,17 +307,129 @@ if __name__ == "__main__":
                 FiftClose = (15 * PFift) - sum(USD_JPY["close"][len(USD_JPY)-14:])
 
                 # DECI(判定結果)から精度(確率)を更新
+                # 流動性を持たせるために最新100件の間にすること
+                # 暫定的な処理なので注意（汎用性を持たせるとすれば、各カラムごとにループを使って計算すること）
                 DECI = mongodb_read3(c.DECISION_COL)
                 DECI = DECI.sort_values(by="time")
                 DECI = DECI.reset_index()
-                U = len(DECI)
-                # 正解した数/試行数で正答精度を調べる
-                probPClose = sum(DECI["PPClose"]) / U
-                probPLClose = sum(DECI["PPLClose"]) / U
-                probPL2Close = sum(DECI["PPL2Close"]) / U
-                probFiveClose = sum(DECI["PFiveClose"]) / U
-                probTenClose = sum(DECI["PTenClose"]) / U
-                probFiftClose = sum(DECI["PFiftClose"]) / U
+                # それぞれの母数を求める処理
+                PCU = len(DECI["PPClose"])          # PClose
+                PLCU = len(DECI["PPLClose"])        # PLClose
+                PL2CU = len(DECI["PPL2Close"])      # PL2Close
+                PFVCU = len(DECI["PFiveClose"])     # PFiveClose
+                PTCU = len(DECI["PTenClose"])       # PTenClose
+                PFFCU = len(DECI["PFiftClose"])     # PFiftClose
+
+                # 正解した数/試行数で正答精度を調べる(個別に反映させられるようにすること)
+                if PCU < 100:
+                    probPClose = sum(DECI["PPClose"]) / PCU
+                else:
+                    probPClose = sum(DECI["PPClose"][len(DECI) - 100:]) / 100
+                if PLCU < 100:
+                    probPLClose = sum(DECI["PPLClose"]) / PLCU
+                else:
+                    probPLClose = sum(DECI["PPLClose"][len(DECI)-100:]) / 100
+                if PL2CU < 100:
+                    probPL2Close = sum(DECI["PPL2Close"]) / PL2CU
+                else:
+                    probPL2Close = sum(DECI["PPL2Close"][len(DECI)-100:]) / 100
+                if PFVCU < 100:
+                    probFiveClose = sum(DECI["PFiveClose"]) / PFVCU
+                else:
+                    probFiveClose = sum(DECI["PFiveClose"][len(DECI)-100:]) / 100
+                if PTCU < 100:
+                    probTenClose = sum(DECI["PTenClose"]) / PTCU
+                else:
+                    probTenClose = sum(DECI["PTenClose"][len(DECI)-100:]) / 100
+                if PFFCU < 100:
+                    probFiftClose = sum(DECI["PFiftClose"]) / PFFCU
+                else:
+                    probFiftClose = sum(DECI["PFiftClose"][len(DECI)-100:]) / 100
+
+                # 先日のCloseと大小を図って確率を加算していく
+                # 確率の多数決のための処理
+                # 初期化
+                AboveScore = 0.0     # 以上
+                BelowScore = 0.0     # 以下
+                Asumc = 0.0          # 以上に分類されたCloseを加算
+                Bsumc = 0.0          # 以下に分類されたCloseを加算
+                An = 0.0             # 以上に分類された数
+                Bn = 0.0             # 以下に分類された数
+
+                if SClose <= PClose:
+                    AboveScore += probPClose
+                    Asumc += PClose
+                    An += 1.0
+                else:
+                    BelowScore += probPClose
+                    Bsumc += PClose
+                    Bn += 1.0
+
+                if SClose <= PLClose:
+                    AboveScore += probPLClose
+                    Asumc += PLClose
+                    An += 1.0
+                else:
+                    BelowScore += probPLClose
+                    Bsumc += PLClose
+                    Bn += 1.0
+
+                if SClose <= PL2Close:
+                    AboveScore += probPL2Close
+                    Asumc += PL2Close
+                    An += 1.0
+                else:
+                    BelowScore += probPL2Close
+                    Bsumc += PL2Close
+                    Bn += 1.0
+
+                if SClose <= FiveClose:
+                    AboveScore += probFiveClose
+                    Asumc += FiveClose
+                    An += 1.0
+                else:
+                    BelowScore += probFiveClose
+                    Bsumc += FiveClose
+                    Bn += 1.0
+
+                if SClose <= TenClose:
+                    AboveScore += probTenClose
+                    Asumc += TenClose
+                    An += 1.0
+                else:
+                    BelowScore += probTenClose
+                    Bsumc += TenClose
+                    Bn += 1.0
+
+                if SClose <= FiftClose:
+                    AboveScore += probFiftClose
+                    Asumc += FiftClose
+                    An += 1.0
+                else:
+                    BelowScore += probFiftClose
+                    Bsumc += FiftClose
+                    Bn += 1.0
+
+                # 算出したaboveとbelowを使ってユニット量を決めておく
+                # 残高の割合で決める
+                # 仮に資本金３０万ならば、現在の値段×Unit量で取引限界を考える
+                # 下記のような条件ならば、現在値を120と仮定すると１回取引辺り36000円動く形になる
+                # Unitが100以下になる（残高10万を下回る）と取引できないかもしれない？
+                if AboveScore > BelowScore:       # 前日より上がると予想した時、強気の勝負
+                    if AccountData["balance"] > 100000:
+                        Unit = AccountData["balance"] / 1000
+                    else:
+                        Unit = 100
+                    # 前日より上がると予想したCloseの平均値
+                    StandardClose = (Asumc / An)
+                else:                   # 前日より下がると予想した時、消極的勝負
+                    if AccountData["balance"] > 100000:
+                        Unit = AccountData["balance"] / 2000
+                    else:
+                        Unit = 100
+                    # 前日より下がると予想したCloseの平均値
+                    StandardClose = (Bsumc / Bn)
+
 
         hour = GetHour()
         # 活動時間範囲を決める処理
@@ -315,9 +447,20 @@ if __name__ == "__main__":
             # １分ごとにする処理
             # 現在のレートを格納
             Now_Rate = OandaTimeRate()
-            print("１分足の値")
+            Now_Time = dt.now()
+            # キューの中に格納（720個を超えた場合は古い物から捨てる）
+            if len(queue) > 720:
+                queue.append([Now_Rate,Now_Time])
+                queue.popleft()
+            else:
+                queue.append([Now_Rate,Now_Time])
+
+            print("現時点の値")
             print(Now_Rate)
             # 売買関数
+            # トレンド推移状況を見るためのqueueが十分にそろってから動くようにする
+            if len(queue) >60:
+                """TradeSignal()を入れる"""
 
             act = False
             time.sleep(60)
