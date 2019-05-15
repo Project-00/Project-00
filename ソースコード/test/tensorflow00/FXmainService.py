@@ -573,9 +573,9 @@ if __name__ == "__main__":
             print(Now_Rate)
             # 売買関数
             # トレンド推移状況を見るためのqueueが十分にそろってから動くようにする
-            # if len(queue) >60:
-            #     O = TradeOrder(Now_Rate,queue,Unit,StandardClose)
+            if len(queue) >60:
+                O = TradeOrder(Now_Rate,queue,Unit,StandardClose)
 
             act = False
-            time.sleep(30)
+            time.sleep(10)
 

@@ -17,6 +17,18 @@ config.sections()
 
 account_id = int(config["OANDA"]["account_id"])
 api_key = config["OANDA"]["api_key"]
+# アカウントのデータ更新　以下が入ってる
+# {'accountId': 2412596,        アカウントID
+#  'realizedPl': 0,             実現損益
+#  'marginRate': 0.04,          銘柄の必要証拠金率
+#  'marginUsed': 0,             現在の中点レートを使用して口座の通貨に変換
+#  'openTrades': 0,             未決済トレードの数
+#  'unrealizedPl': 0,           評価損益
+#  'openOrders': 0,             未決済注文の数
+#  'balance': 3000000,          口座残高
+#  'marginAvail': 3000000,
+#  'accountName': 'Primary',    アカウントの名前
+#  'accountCurrency': 'JPY'}    アカウントの国籍
 AccountData = ResponsAccountDetail(c.DEMO)
 Balance = AccountData["balance"] # 残高
 
@@ -68,79 +80,90 @@ StandardClose : 21時点のCloseの予測値
 """
 
 def TradeOrder(Now_Rate,queue,Unit,StandardClose):
-    Last = len(queue)
-    UseList = np.array([queue[i][0] for i in range(Last-60,Last)])
-    UseList = changelist1(UseList)
+    if AccountData["openTrades"] <= 5:       # 未決済注文が10個以下になった時に起動
+        Last = len(queue)
+        UseList = np.array([queue[i][0] for i in range(Last-60,Last)])
+        UseList = changelist1(UseList)
 
-    # 単回帰のためのList
-    TiltList1 = np.array([queue[i][0] for i in range(Last-15,Last)])      # Y軸用の現在の値集合（目的関数）
-    TiltList2 = np.array([i for i in range(1,16)])      # X軸用の時間の集合（説明関数）
-    TiltList1 = changelist2(TiltList1)      # 2次元のリストに直している
-    TiltList2 = changelist2(TiltList2)      # 1次元のリストに直している
+        # 単回帰のためのList
+        TiltList1 = np.array([queue[i][0] for i in range(Last-15,Last)])      # Y軸用の現在の値集合（目的関数）
+        TiltList2 = np.array([i for i in range(1,16)])      # X軸用の時間の集合（説明関数）
+        TiltList1 = changelist2(TiltList1)      # 2次元のリストに直している
+        TiltList2 = changelist2(TiltList2)      # 1次元のリストに直している
 
-    lr = LinearRegression()
-    X = TiltList2
-    Y = TiltList1
-    lr.fit(X,Y)
+        lr = LinearRegression()
+        X = TiltList2
+        Y = TiltList1
+        lr.fit(X,Y)
 
-    Tilt = lr.coef_[0] # 傾き
+        Tilt = lr.coef_[0] # 傾き
 
-    # 売り側か買う側か細かく事象を決めておく処理
-    # 現在の値が予測よりも上の時の処理
-    if Now_Rate >= StandardClose:
-        # 傾きが上を向いているとき
-        if Tilt >= 0.3:
-            Band = BBANDS(UseList,5)
-            # 96%の信頼区間を超えてるのでこの先も伸びる想定（）
-            if Band[0][-1] <= Now_Rate:
-                return
-            # 96%の信頼区間の範疇なので何時反転しても良いように売利に入る（保守的な利益の追求）
+        # 売り側か買う側か細かく事象を決めておく処理
+        # 現在の値が予測よりも上の時の処理
+        if Now_Rate >= StandardClose:
+            # 傾きが上を向いているとき
+            if Tilt >= 0.3:
+                Band = BBANDS(UseList,5)
+                # 96%の信頼区間を超えてるのでこの先も伸びる想定（）
+                if Band[0][-1] <= Now_Rate:
+                    print("注文せず")
+                    return
+                # 96%の信頼区間の範疇なので何時反転しても良いように売利に入る（保守的な利益の追求）
+                else:
+                    Side = "sell"
+            # 傾きが横ばいで不安定の時、逆行現象のシグナルを見つける（結局下へ向かうのが分かる）
+            elif (Tilt < 0.3) and (Tilt > -0.3):
+                RsiScore = RSI(UseList,14)
+                # 今の動きの最高値付近を叩いてる状態なので反転に備えて売りに入る
+                if RsiScore[-1] > 80:
+                    Side = "sell"
+                # 横ばいが続くならば状況が分からないので触らないでおく
+                else:
+                    print("注文せず")
+                    return
+            # 傾きが下を向いているとき、素直に予測より上の間だけさっさと売ってしまう
             else:
-                Side = "sell"
-        # 傾きが横ばいで不安定の時、逆行現象のシグナルを見つける（結局下へ向かうのが分かる）
-        elif (Tilt < 0.3) and (Tilt > -0.3):
-            RsiScore = RSI(UseList,14)
-            # 今の動きの最高値付近を叩いてる状態なので反転に備えて売りに入る
-            if RsiScore[-1] > 80:
-                Side = "sell"
-            # 横ばいが続くならば状況が分からないので触らないでおく
-            else:
-                return
-        # 傾きが下を向いているとき、素直に予測より上の間だけさっさと売ってしまう
+                    Side = "sell"
+
+        # 現在の値が予測よりも下の時の処理
         else:
-                Side = "sell"
-
-    # 現在の値が予測よりも下の時の処理
-    else:
-        # 傾きが上を向いているとき、素直に予測より下の間だけ買っておく
-        if Tilt >= 0.3:
-            Side = "buy"
-        # 傾きが横ばいで不安定の時、逆行シグナルを見つける（結局上に向かうのが分かる）
-        elif (Tilt < 0.3) and (Tilt > -0.3):
-            RsiScore = RSI(UseList,14)
-            # 売値の下限付近を叩いてる状態なので反転に備えて買っておく
-            if RsiScore[-1] < 20:
+            # 傾きが上を向いているとき、素直に予測より下の間だけ買っておく
+            if Tilt >= 0.3:
                 Side = "buy"
-            # 横ばいが続くならば状況が分からないので触らないようにしておく
+            # 傾きが横ばいで不安定の時、逆行シグナルを見つける（結局上に向かうのが分かる）
+            elif (Tilt < 0.3) and (Tilt > -0.3):
+                RsiScore = RSI(UseList,14)
+                # 売値の下限付近を叩いてる状態なので反転に備えて買っておく
+                if RsiScore[-1] < 20:
+                    Side = "buy"
+                # 横ばいが続くならば状況が分からないので触らないようにしておく
+                else:
+                    print("注文せず")
+                    return
+            # 傾きが下を向いているとき
             else:
-                return
-        # 傾きが下を向いているとき
+                Band = BBANDS(UseList,5)
+                # 信頼区間96%を超えてる場合はまだ下がり続けるので下がりきるまで触らない
+                if Band[2][-1] <= Now_Rate:
+                    print("注文せず")
+                    return
+                # 信頼区間96%の範囲内ならば、反転を考慮して安いうちに買っておく
+                else:
+                    Side = "buy"
+
+        # 預金が十二分にあるとき動くようにする。資金が無ければ注文はしない。
+        if (Side == "buy") and (Now_Rate * Unit < Balance):
+            # 注文を行う処理
+            Order(c.DEMO,Now_Rate,Unit,Side)
+            print(Now_Rate * Unit ,"円分の買い注文")
+            print("残高は", Balance , "円")
+        elif (Side == "sell") and (Now_Rate * Unit < Balance):
+            Order(c.DEMO, Now_Rate, Unit, Side)
+            print(Now_Rate * Unit ,"円分の売り注文")
+            print("残高は", Balance, "円")
         else:
-            Band = BBANDS(UseList,5)
-            # 信頼区間96%を超えてる場合はまだ下がり続けるので下がりきるまで触らない
-            if Band[2][-1] <= Now_Rate:
-                return
-            # 信頼区間96%の範囲内ならば、反転を考慮して安いうちに買っておく
-            else:
-                Side = "buy"
-
-    # 預金が十二分にあるとき動くようにする。資金が無ければ注文はしない。
-    if (Side == "buy") and (Now_Rate * Unit < Balance):
-        # 注文を行う処理
-        Order(c.DEMO,Now_Rate,Unit,Side)
-    elif (Side == "sell") and (Now_Rate * Unit < Balance):
-        Order(c.DEMO, Now_Rate, Unit, Side)
+            print("注文せず")
+            return
     else:
+        print("注文せず")
         return
-
-    return
