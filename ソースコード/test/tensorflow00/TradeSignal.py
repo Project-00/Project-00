@@ -66,24 +66,17 @@ StandardClose : 21時点のCloseの予測値
 ※残高がある一定値を下回った時点で買いの自動取引を行わないようにする処理も追加
 
 """
-# 実験痕
-# list = np.array([1,0,3,1,5,3,7,5,9,7,11,9,13,11,15,13,17,15,19,17,21,19,23],dtype = "f8")
-#
-# Data = changelist1(list)
-# Data2 = changelist2(list)
-# trend = BBANDS(Data,5)
-#
-# print(trend)
 
-def TradeOrder(Now_Rate,queue,Units,StandardClose):
-    UseList = [queue[i][0] for i in range(len(queue)-60,-1)]
+def TradeOrder(Now_Rate,queue,Unit,StandardClose):
+    Last = len(queue)
+    UseList = np.array([queue[i][0] for i in range(Last-60,Last)])
     UseList = changelist1(UseList)
 
     # 単回帰のためのList
-    TiltList1 = [queue[i][0] for i in range(len(queue)-15,-1)]      # Y軸用の現在の値集合（目的関数）
-    TiltList2 = [queue[i][1] for i in range(len(queue)-15,-1)]      # X軸用の時間の集合（説明関数）
-    TiltList1 = changelist1(TiltList1)      # 1次元のリストに直している
-    TiltList2 = changelist1(TiltList2)      # 1次元のリストに直している
+    TiltList1 = np.array([queue[i][0] for i in range(Last-15,Last)])      # Y軸用の現在の値集合（目的関数）
+    TiltList2 = np.array([i for i in range(1,16)])      # X軸用の時間の集合（説明関数）
+    TiltList1 = changelist2(TiltList1)      # 2次元のリストに直している
+    TiltList2 = changelist2(TiltList2)      # 1次元のリストに直している
 
     lr = LinearRegression()
     X = TiltList2
@@ -108,7 +101,7 @@ def TradeOrder(Now_Rate,queue,Units,StandardClose):
         elif (Tilt < 0.3) and (Tilt > -0.3):
             RsiScore = RSI(UseList,14)
             # 今の動きの最高値付近を叩いてる状態なので反転に備えて売りに入る
-            if RsiScore > 80:
+            if RsiScore[-1] > 80:
                 Side = "sell"
             # 横ばいが続くならば状況が分からないので触らないでおく
             else:
@@ -126,7 +119,7 @@ def TradeOrder(Now_Rate,queue,Units,StandardClose):
         elif (Tilt < 0.3) and (Tilt > -0.3):
             RsiScore = RSI(UseList,14)
             # 売値の下限付近を叩いてる状態なので反転に備えて買っておく
-            if RsiScore < 20:
+            if RsiScore[-1] < 20:
                 Side = "buy"
             # 横ばいが続くならば状況が分からないので触らないようにしておく
             else:
@@ -144,9 +137,9 @@ def TradeOrder(Now_Rate,queue,Units,StandardClose):
     # 預金が十二分にあるとき動くようにする。資金が無ければ注文はしない。
     if (Side == "buy") and (Now_Rate * Unit < Balance):
         # 注文を行う処理
-        Order(c.DEMO,Now_Rate,Units,Side)
+        Order(c.DEMO,Now_Rate,Unit,Side)
     elif (Side == "sell") and (Now_Rate * Unit < Balance):
-        Order(c.DEMO, Now_Rate, Units, Side)
+        Order(c.DEMO, Now_Rate, Unit, Side)
     else:
         return
 

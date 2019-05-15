@@ -167,16 +167,18 @@ def ini():
     # Unitが100以下になる（残高10万を下回る）と取引できないかもしれない？
     if AboveScore > BelowScore:  # 前日より上がると予想した時、強気の勝負
         if AccountData["balance"] > 100000:
-            Unit = AccountData["balance"] / 1000
+            # Unit = AccountData["balance"] / 1000
+            Unit = 10000
         else:
-            Unit = 100
+            Unit = 10000
         # 前日より上がると予想したCloseの平均値
         StandardClose = (Asumc / An)
     else:  # 前日より下がると予想した時、消極的勝負
         if AccountData["balance"] > 100000:
-            Unit = AccountData["balance"] / 2000
+            # Unit = AccountData["balance"] / 2000
+            Unit = 10000
         else:
-            Unit = 100
+            Unit = 10000
         # 前日より下がると予想したCloseの平均値
         StandardClose = (Bsumc / Bn)
 
@@ -524,19 +526,21 @@ if __name__ == "__main__":
                 # 残高の割合で決める
                 # 仮に資本金３０万ならば、現在の値段×Unit量で取引限界を考える
                 # 下記のような条件ならば、現在値を120と仮定すると１回取引辺り36000円動く形になる
-                # Unitが100以下になる（残高10万を下回る）と取引できないかもしれない？
+                # デモ口座だと最低通貨量が10000らしい……　プロ口座は1000なのでもう少し細かくできる
                 if AboveScore > BelowScore:       # 前日より上がると予想した時、強気の勝負
                     if AccountData["balance"] > 100000:
-                        Unit = AccountData["balance"] / 1000
+                        # Unit = AccountData["balance"] / 10000
+                        Unit = 10000
                     else:
-                        Unit = 100
+                        Unit = 10000
                     # 前日より上がると予想したCloseの平均値
                     StandardClose = (Asumc / An)
                 else:                   # 前日より下がると予想した時、消極的勝負
                     if AccountData["balance"] > 100000:
-                        Unit = AccountData["balance"] / 2000
+                        # Unit = AccountData["balance"] / 2000
+                        Unit = 10000
                     else:
-                        Unit = 100
+                        Unit = 10000
                     # 前日より下がると予想したCloseの平均値
                     StandardClose = (Bsumc / Bn)
 
@@ -569,8 +573,8 @@ if __name__ == "__main__":
             print(Now_Rate)
             # 売買関数
             # トレンド推移状況を見るためのqueueが十分にそろってから動くようにする
-            if len(queue) >60:
-                O = TradeOrder(Now_Rate,queue,Unit,StandardClose)
+            # if len(queue) >60:
+            #     O = TradeOrder(Now_Rate,queue,Unit,StandardClose)
 
             act = False
             time.sleep(30)

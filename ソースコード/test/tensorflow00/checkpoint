@@ -1,2 +1,2 @@
-model_checkpoint_path: "C:\\Users\\Akini\\github\\project00\\develop\\Project-00\\\343\202\275\343\203\274\343\202\271\343\202\263\343\203\274\343\203\211\\test\\tensorflow00\\CLOSE_PredictionModel.ckpt"
-all_model_checkpoint_paths: "C:\\Users\\Akini\\github\\project00\\develop\\Project-00\\\343\202\275\343\203\274\343\202\271\343\202\263\343\203\274\343\203\211\\test\\tensorflow00\\CLOSE_PredictionModel.ckpt"
+model_checkpoint_path: "C:\\Users\\Akini\\github\\project00\\develop\\Project-00\\\343\202\275\343\203\274\343\202\271\343\202\263\343\203\274\343\203\211\\test\\tensorflow00\\FIFTEENAVERAGE_PredictionModel.ckpt"
+all_model_checkpoint_paths: "C:\\Users\\Akini\\github\\project00\\develop\\Project-00\\\343\202\275\343\203\274\343\202\271\343\202\263\343\203\274\343\203\211\\test\\tensorflow00\\FIFTEENAVERAGE_PredictionModel.ckpt"
