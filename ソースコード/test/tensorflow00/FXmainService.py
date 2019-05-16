@@ -107,56 +107,56 @@ def ini():
     Bn = 0.0  # 以下に分類された数
 
     if SClose <= PClose:
-        AboveScore += probPClose
+        AboveScore *= probPClose
         Asumc += PClose
         An += 1.0
     else:
-        BelowScore += probPClose
+        BelowScore *= probPClose
         Bsumc += PClose
         Bn += 1.0
 
     if SClose <= PLClose:
-        AboveScore += probPLClose
+        AboveScore *= probPLClose
         Asumc += PLClose
         An += 1.0
     else:
-        BelowScore += probPLClose
+        BelowScore *= probPLClose
         Bsumc += PLClose
         Bn += 1.0
 
     if SClose <= PL2Close:
-        AboveScore += probPL2Close
+        AboveScore *= probPL2Close
         Asumc += PL2Close
         An += 1.0
     else:
-        BelowScore += probPL2Close
+        BelowScore *= probPL2Close
         Bsumc += PL2Close
         Bn += 1.0
 
     if SClose <= FiveClose:
-        AboveScore += probFiveClose
+        AboveScore *= probFiveClose
         Asumc += FiveClose
         An += 1.0
     else:
-        BelowScore += probFiveClose
+        BelowScore *= probFiveClose
         Bsumc += FiveClose
         Bn += 1.0
 
     if SClose <= TenClose:
-        AboveScore += probTenClose
+        AboveScore *= probTenClose
         Asumc += TenClose
         An += 1.0
     else:
-        BelowScore += probTenClose
+        BelowScore *= probTenClose
         Bsumc += TenClose
         Bn += 1.0
 
     if SClose <= FiftClose:
-        AboveScore += probFiftClose
+        AboveScore *= probFiftClose
         Asumc += FiftClose
         An += 1.0
     else:
-        BelowScore += probFiftClose
+        BelowScore *= probFiftClose
         Bsumc += FiftClose
         Bn += 1.0
 
@@ -469,56 +469,56 @@ if __name__ == "__main__":
                 Bn = 0.0             # 以下に分類された数
 
                 if SClose <= PClose:
-                    AboveScore += probPClose
+                    AboveScore *= probPClose
                     Asumc += PClose
                     An += 1.0
                 else:
-                    BelowScore += probPClose
+                    BelowScore *= probPClose
                     Bsumc += PClose
                     Bn += 1.0
 
                 if SClose <= PLClose:
-                    AboveScore += probPLClose
+                    AboveScore *= probPLClose
                     Asumc += PLClose
                     An += 1.0
                 else:
-                    BelowScore += probPLClose
+                    BelowScore *= probPLClose
                     Bsumc += PLClose
                     Bn += 1.0
 
                 if SClose <= PL2Close:
-                    AboveScore += probPL2Close
+                    AboveScore *= probPL2Close
                     Asumc += PL2Close
                     An += 1.0
                 else:
-                    BelowScore += probPL2Close
+                    BelowScore *= probPL2Close
                     Bsumc += PL2Close
                     Bn += 1.0
 
                 if SClose <= FiveClose:
-                    AboveScore += probFiveClose
+                    AboveScore *= probFiveClose
                     Asumc += FiveClose
                     An += 1.0
                 else:
-                    BelowScore += probFiveClose
+                    BelowScore *= probFiveClose
                     Bsumc += FiveClose
                     Bn += 1.0
 
                 if SClose <= TenClose:
-                    AboveScore += probTenClose
+                    AboveScore *= probTenClose
                     Asumc += TenClose
                     An += 1.0
                 else:
-                    BelowScore += probTenClose
+                    BelowScore *= probTenClose
                     Bsumc += TenClose
                     Bn += 1.0
 
                 if SClose <= FiftClose:
-                    AboveScore += probFiftClose
+                    AboveScore *= probFiftClose
                     Asumc += FiftClose
                     An += 1.0
                 else:
-                    BelowScore += probFiftClose
+                    BelowScore *= probFiftClose
                     Bsumc += FiftClose
                     Bn += 1.0
 
