@@ -554,20 +554,19 @@ if __name__ == "__main__":
                 act = True
 
             # 1分置きにチェックさせる
-            time.sleep(60)
+            time.sleep(600)
         else:
             # スケジューラー発動
             schedule.run_pending()
             # １分ごとにする処理
             # 現在のレートを格納
             Now_Rate = OandaTimeRate()
-            Now_Time = LateDate(1)
             # キューの中に格納（720個を超えた場合は古い物から捨てる）
             if len(queue) > 720:
-                queue.append([Now_Rate,Now_Time])
+                queue.append([Now_Rate])
                 queue.popleft()
             else:
-                queue.append([Now_Rate,Now_Time])
+                queue.append([Now_Rate])
 
             print("現時点の値")
             print(Now_Rate)

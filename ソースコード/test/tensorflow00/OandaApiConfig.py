@@ -61,9 +61,11 @@ def HistricalTrade(prm,count):
 # -------------注文する関数群----------------
 
 # ストリーミング成行注文
-# unitsは通貨量（ドル指定なら1000ドル,円指定なら1000円）統一化する量:　数字
+# unitsは通貨量:　数字
 # sideは買い側か売り側か等を入力(売り:"sell",買い:"buy")
-def Order(prm,Price,Units,Side):
+# TakeProfit はとある利益が出た時点で決済をしてしまう処理
+# StopLoss は損切りする値。思惑とは違う注文だった場合消してしまうためにある。
+def Order(prm,Price,Units,Side,TakeProfit,StopLoss):
     environment = config[prm]["environment"]
     oanda = oandapy.API(environment=environment, access_token=api_key)
     order = oanda.create_order(account_id= account_id,
@@ -71,6 +73,8 @@ def Order(prm,Price,Units,Side):
                                price = Price,
                                units = Units,
                                side = Side,
+                               takeProfit = TakeProfit,
+                               stopLoss = StopLoss,
                                type = "market")
 
     return order
