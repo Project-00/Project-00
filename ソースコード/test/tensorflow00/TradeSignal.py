@@ -29,8 +29,6 @@ api_key = config["OANDA"]["api_key"]
 #  'marginAvail': 3000000,
 #  'accountName': 'Primary',    アカウントの名前
 #  'accountCurrency': 'JPY'}    アカウントの国籍
-AccountData = ResponsAccountDetail(c.DEMO)
-Balance = AccountData["balance"] # 残高
 
 """
 必要な引数
@@ -80,6 +78,9 @@ StandardClose : 21時点のCloseの予測値
 """
 
 def TradeOrder(Now_Rate,queue,Unit,StandardClose):
+    AccountData = ResponsAccountDetail(c.DEMO)
+    Balance = AccountData["balance"]  # 残高
+
     if AccountData["openTrades"] <= 5:       # 未決済注文が10個以下になった時に起動
         Last = len(queue)
         UseList = np.array([queue[i][0] for i in range(Last-60,Last)])
